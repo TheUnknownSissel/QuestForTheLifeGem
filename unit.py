@@ -2,6 +2,7 @@ import os
 import random
 import pygame
 import string
+import sys
 
 class Unit:
     def __init__(self, name, health, speed, defen, res, phy, mag):
@@ -12,3 +13,4 @@ class Unit:
         self.res = int(res)
         self.phy = int(phy)
         self.mag = int(mag)
+    def __
