@@ -6,9 +6,7 @@ import pygame
 #Initialize the pygame
 pygame.init()
 #
-class Unit:
-    def __init__(self, name, health):
-        self.name = name
+
 
 #Create the window
 background_colour = (0, 133, 66)
