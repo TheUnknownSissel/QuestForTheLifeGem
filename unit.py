@@ -13,4 +13,5 @@ class Unit:
         self.res = int(res)
         self.phy = int(phy)
         self.mag = int(mag)
-    def __
+    def getname():
+        return name
