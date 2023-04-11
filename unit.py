@@ -14,7 +14,8 @@ class Unit:
         self.res = int(res)
         self.atk  = int(atk)
         self.type = string(type)
-
+        self.image = ()
+        self.rect = ()
     def set_name(self, n):
         self.name = n
 
