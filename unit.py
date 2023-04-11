@@ -6,7 +6,7 @@ import sys
 
 
 class Unit:
-    def __init__(self, name, health, speed, defen, res, atk, type):
+    def __init__(self, name, health, speed, defen, res, atk, type, imageref):
         self.name = string(name)
         self.health = int(health)
         self.speed = int(speed)
@@ -14,7 +14,8 @@ class Unit:
         self.res = int(res)
         self.atk  = int(atk)
         self.type = string(type)
-
+        self.image = pygame.image.load(imageref)
+        self.rect = self.rect()
     def set_name(self, n):
         self.name = n
 
