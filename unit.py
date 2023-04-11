@@ -32,7 +32,7 @@ class Unit:
 
     def set_atk(self, a):
         self.atk = a
-    def set_type(self):
+    def set_type(self, t):
         self.type = t
 
     def get_name(self):
