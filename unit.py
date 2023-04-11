@@ -5,17 +5,20 @@ import string
 import sys
 
 
-class Unit:
+class Player:
     def __init__(self, name, health, speed, defen, res, atk, type, imageref):
-        self.name = string(name)
-        self.health = int(health)
-        self.speed = int(speed)
-        self.defen = int(defen)
-        self.res = int(res)
-        self.atk  = int(atk)
-        self.type = string(type)
+        self.name = (name)
+        self.health = (health)
+        self.speed = (speed)
+        self.defen = (defen)
+        self.res = (res)
+        self.atk  = (atk)
+        self.type = (type)
         self.image = pygame.image.load(imageref)
-        self.rect = self.rect()
+        self.rect = self.image.get_rect()  # checks images and get rect...
+
+
+
     def set_name(self, n):
         self.name = n
 

@@ -5,8 +5,9 @@ import pygame.event as Events
 #import os
 import sys
 import unit
+from unit import *
 import mob
-
+import string
 
 
 
@@ -29,13 +30,13 @@ RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 MAGENTA = (255, 0, 255)
 #Initialize Units
-#mage = unit("MAGE", 70, 3, 1, 3, -5, 10)
-#warrior = unit("Warrior", 100, 8, 5, 2, 10, 0)
-#tank = unit("Tank", 200, 1, 12, 7, 0, 0)
+mage = Player("MAGE", 70, 3, 1, 3, -5, 10, "download.jpeg")
+warrior = Player("Warrior", 100, 8, 5, 2, 10, 0, "download.jpeg")
+tank = Player("Tank", 200, 1, 12, 7, 0, 0, "download.jpeg")
 
 
 #Create list of these units
-#units = [warrior, mage, tank]
+units = [warrior, mage, tank]
 
 #Initialize mobs
 #list here
@@ -53,5 +54,5 @@ pygame.display.flip()
 
 running = True
 
-pygame.draw.rect(screen, WHITE, )
+#pygame.draw.rect(screen, WHITE, )
 #pygame.draw.rect(screen, MAGENTA, (400, 100, 100, 150))
