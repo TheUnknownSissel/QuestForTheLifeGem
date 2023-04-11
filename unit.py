@@ -36,6 +36,7 @@ class Player:
 
     def set_atk(self, a):
         self.atk = a
+
     def set_type(self, t):
         self.type = t
 
@@ -56,5 +57,6 @@ class Player:
 
     def get_atk(self):
         return self.atk
+
     def get_type(self):
         return self.type
