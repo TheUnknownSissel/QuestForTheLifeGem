@@ -6,7 +6,7 @@ tree = 1
 
 textures = {
              grass : pygame.image.load('Textures/downdload.jpeg'),
-             tree  : pygame.image.load('Textures/tree.png')
+             tree : pygame.image.load('Textures/tree.png')
 
            }
 
