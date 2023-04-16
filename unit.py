@@ -60,3 +60,18 @@ class Player:
 
     def get_type(self):
         return self.type
+
+    def take_damage (self, damage, magdamage):
+        defen = self.get_defen()
+        res = self.get_res()
+        health = self.get_health()
+        physDamage = damage - defen
+        magDamage = magdamage - res
+        healthChangePhys = health - physDamage
+        healthChangeMag = health - magDamage
+        if physDamage > 0:
+            self.set_health(self, healthChangePhys)
+        if magDamage > 0:
+            self.set_health(self, healthChangeMag)
+
+        return 0

@@ -1,16 +1,13 @@
-#import random
-#import webbrowser
+import random
+import webbrowser
 import pygame
 import pygame.event as Events
-#import os
+import os
 import sys
 import unit
 from unit import *
 import mob
 import string
-
-
-
 
 #Initialize the pygame
 pygame.init()
@@ -56,3 +53,5 @@ running = True
 
 #pygame.draw.rect(screen, WHITE, )
 #pygame.draw.rect(screen, MAGENTA, (400, 100, 100, 150))
+
+#Starting the game loop
