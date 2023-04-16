@@ -1,13 +1,13 @@
-import random
-import webbrowser
+import random, webbrowser
 import pygame
 import pygame.event as Events
-import os
-import sys
+import os, sys
 import unit
 from unit import *
 import mob
 import string
+import map
+from map import *
 
 #Initialize the pygame
 pygame.init()
@@ -27,13 +27,20 @@ RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 MAGENTA = (255, 0, 255)
 #Initialize Units
-mage = Player("MAGE", 70, 3, 1, 3, -5, 10, "download.jpeg")
-warrior = Player("Warrior", 100, 8, 5, 2, 10, 0, "download.jpeg")
-tank = Player("Tank", 200, 1, 12, 7, 0, 0, "download.jpeg")
+mage = Player("MAGE", 70, 3, 1, 3, -5, 10, "Textures/download.jpeg")
+warrior = Player("Warrior", 100, 8, 5, 2, 10, 0, "Textures/download.jpeg")
+tank = Player("Tank", 200, 1, 12, 7, 0, 0, "Textures/download.jpeg")
 
 
 #Create list of these units
 units = [warrior, mage, tank]
+
+#Create player positions and list of all player positioining
+unitPos1 = [MAPWIDTH-1, MAPHEIGHT-1]
+unitPos2 = [MAPWIDTH-2, MAPHEIGHT-1]
+unitPos3 = [MAPWIDTH-3, MAPHEIGHT-1]
+
+unitPosList = [unitPos1, unitPos2, unitPos3]
 
 #Initialize mobs
 #list here
@@ -42,8 +49,8 @@ units = [warrior, mage, tank]
 
 
 
-#screen start up
-screen = pygame.display.set_mode((screen_width, screen_height))
+#screen start up - note the way in how I use tilesize and the map dementions was seen from PygameFireEmblem by cmwchoi on GitHub
+screen = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE))
 
 pygame.display.set_caption('Quest For the Life Gem')
 
