@@ -27,9 +27,9 @@ RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 MAGENTA = (255, 0, 255)
 #Initialize Units
-mage = Player("MAGE", 70, 3, 1, 3, -5, 10, "Textures/download.jpeg")
-warrior = Player("Warrior", 100, 8, 5, 2, 10, 0, "Textures/download.jpeg")
-tank = Player("Tank", 200, 1, 12, 7, 0, 0, "Textures/download.jpeg")
+mage = Player("Mage", 70, 3, 1, 3, -5, 10, "Textures/MageTest.png")
+warrior = Player("Warrior", 100, 8, 5, 2, 10, 0, "Textures/FighterTest.png")
+tank = Player("Tank", 200, 1, 12, 7, 0, 0, "Textures/WarriorTest.png")
 
 
 #Create list of these units
@@ -43,7 +43,7 @@ unitPos3 = [MAPWIDTH-3, MAPHEIGHT-1]
 unitPosList = [unitPos1, unitPos2, unitPos3]
 
 #Initialize mobs
-#list here
+#list here for turn order
 
 #Turn order sort both lists on speed
 
