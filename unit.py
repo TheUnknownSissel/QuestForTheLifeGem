@@ -31,7 +31,7 @@ class Player(pygame.sprite.Sprite):
 
 
 
-
+    #Getters and setters for all unit stats
     def set_name(self, n):
         self.name = n
 
@@ -88,5 +88,5 @@ class Player(pygame.sprite.Sprite):
             self.set_health(self, healthChangeMag)
 
         return 0
-    def update(self):
-        if self.get_health() <= 0:
+    #def update(self):
+        #if self.get_health() <= 0:

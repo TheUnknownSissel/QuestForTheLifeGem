@@ -27,6 +27,8 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 MAGENTA = (255, 0, 255)
+#Commented out for window testing purposes
+'''
 #Initialize Units
 mage = Player("Mage", 70, 3, 1, 3, -5, 10, "Textures/MageTest.png")
 warrior = Player("Warrior", 100, 8, 5, 2, 10, 0, "Textures/FighterTest.png")
@@ -48,10 +50,13 @@ unitPosList = [unitPos1, unitPos2, unitPos3]
 
 #Turn order sort both lists on speed
 
-
+'''
 
 #screen start up - note the way in how I use tilesize and the map dementions was seen from PygameFireEmblem by cmwchoi on GitHub
 screen = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE))
+
+#Fill background with background color
+screen.fill(background_colour)
 
 pygame.display.set_caption('Quest For the Life Gem')
 clock = pygame.time.Clock()
@@ -65,3 +70,8 @@ running = True
 
 
 #Starting the game loop
+while running:
+    for event in pygame.event.get():
+        #Check for quit event to stop game
+        if event.type == pygame.QUIT:
+            running = False
