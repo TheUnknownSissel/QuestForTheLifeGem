@@ -1,7 +1,8 @@
 import random, webbrowser
 import pygame
 import pygame.event as Events
-import os, sys
+import os
+import sys
 import unit
 from unit import *
 import mob
@@ -53,6 +54,7 @@ unitPosList = [unitPos1, unitPos2, unitPos3]
 screen = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE))
 
 pygame.display.set_caption('Quest For the Life Gem')
+clock = pygame.time.Clock()
 
 pygame.display.flip()
 
@@ -60,5 +62,6 @@ running = True
 
 #pygame.draw.rect(screen, WHITE, )
 #pygame.draw.rect(screen, MAGENTA, (400, 100, 100, 150))
+
 
 #Starting the game loop

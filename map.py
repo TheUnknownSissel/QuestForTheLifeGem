@@ -11,7 +11,7 @@ textures = {
 
            }
 
-# Tilemap
+#Tilemap
 tilemap = [
             [Tree, Tree, Tree, Tree, Tree, Grass, Grass, Tree,  Grass, Tree, Tree],
             [Grass,     Grass,     Tree, Tree, Tree, Grass, Grass, Grass, Grass, Grass,     Tree],
