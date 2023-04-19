@@ -7,8 +7,12 @@ Tree = 1
 # Stores the tile sets for cropping and creating the map.
 # These use free assets found at https://cainos.itch.io/pixel-art-top-down-basic
 grass_tileset = pygame.image.load('Textures/TX_Tileset_Grass.png')
+tree_tileset = pygame.image.load('Textures/TX_Plant.png')
 
+# TO DO: Due to the nature of the tile sets, I believe it would be best to change the formatting for adding trees/plants
+# to map: maybe similar way to adding characters to screen?
 textures = {
+            # Subsurface used to crop exact parts of tile set for use
              Grass : grass_tileset.subsurface([32,32,32,32]),
              Tree : pygame.image.load('Textures/Tree.png')
 
