@@ -4,9 +4,12 @@ import pygame, sys
 Grass = 0
 Tree = 1
 
+# Stores the tile sets for cropping and creating the map.
+# These use free assets found at https://cainos.itch.io/pixel-art-top-down-basic
+grass_tileset = pygame.image.load('Textures/TX_Tileset_Grass.png')
 
 textures = {
-             Grass : pygame.image.load('Textures/Grass.png'),
+             Grass : grass_tileset.subsurface([32,32,32,32]),
              Tree : pygame.image.load('Textures/Tree.png')
 
            }
