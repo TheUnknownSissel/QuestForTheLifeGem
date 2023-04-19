@@ -56,12 +56,10 @@ unitPosList = [unitPos1, unitPos2, unitPos3]
 screen = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE))
 
 #Fill background with background color
-screen.fill(background_colour)
+#screen.fill(background_colour)
 
 pygame.display.set_caption('Quest For the Life Gem')
 clock = pygame.time.Clock()
-
-pygame.display.flip()
 
 running = True
 
@@ -71,7 +69,15 @@ running = True
 
 #Starting the game loop
 while running:
+    #the game events
     for event in pygame.event.get():
         #Check for quit event to stop game
         if event.type == pygame.QUIT:
             running = False
+
+    for row in range(MAPHEIGHT):
+        # Loop through each column in the row
+        for column in range(MAPWIDTH):
+            # Draw the resource at that position in the tilemap
+            screen.blit(textures[tilemap[row][column]], (column * TILESIZE, row * TILESIZE))
+    pygame.display.update()

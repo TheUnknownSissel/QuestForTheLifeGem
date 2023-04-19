@@ -1,12 +1,12 @@
 import pygame, sys
 # This code is based off of another project found at https://github.com/cmwchoi/PygameFireEmblem/blob/master/SacaeMap.py
-# This includes their map class and some implimentation of how units operate in that system
+# This includes their map class and some implementation of how units operate in that system
 Grass = 0
 Tree = 1
 
 
 textures = {
-             Grass : pygame.image.load('Textures/download.jpeg'),
+             Grass : pygame.image.load('Textures/Grass.png'),
              Tree : pygame.image.load('Textures/Tree.png')
 
            }
