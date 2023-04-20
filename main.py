@@ -35,7 +35,7 @@ unitPos2 = [MAPWIDTH-2, MAPHEIGHT-1]
 unitPos3 = [MAPWIDTH-3, MAPHEIGHT-1]
 
 unitPosList = [unitPos1, unitPos2, unitPos3]
-'''
+
 #Initialize Units
 mage = Player("Mage", 70, 3, 1, 3, -5, 10, "Textures/MageTest.png", MAPWIDTH-1, MAPHEIGHT-1)
 warrior = Player("Warrior", 100, 8, 5, 2, 10, 0, "Textures/FighterTest.png", MAPWIDTH-2, MAPHEIGHT-1)
@@ -43,7 +43,7 @@ tank = Player("Tank", 200, 1, 12, 7, 0, 0, "Textures/WarriorTest.png", MAPWIDTH-
 
 #Create list of these units
 units = [warrior, mage, tank]
-'''
+
 
 
 #Initialize mobs

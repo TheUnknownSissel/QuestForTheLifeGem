@@ -8,6 +8,7 @@ from map import *
 CYAN = (0, 255, 255)
 class Player(pygame.sprite.Sprite):
     def __init__(self, name, health, speed, defen, res, atk, type, imageref, positionx, positiony):
+        '''
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface(imageref, (32, 32))
         self.image.fill(CYAN)
@@ -19,7 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.centerx = MAPWIDTH*TILESIZE / 2
         #why minus 20
         self.rect.bottom = MAPHEIGHT*TILESIZE - 20
-
+        '''
         self.name = (name)
         self.health = (health)
         self.speed = (speed)
@@ -28,6 +29,7 @@ class Player(pygame.sprite.Sprite):
         self.atk  = (atk)
         self.type = (type)
         self.image = pygame.image.load(imageref)
+
 
 
 
