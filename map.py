@@ -51,6 +51,6 @@ tilemap = [
 
 # Game Dimensions
 TILESIZE = 32
-MAPWIDTH = 11
-MAPHEIGHT = 10
+MAPWIDTH = 25
+MAPHEIGHT = 25
 

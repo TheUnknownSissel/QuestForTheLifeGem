@@ -1,3 +1,4 @@
+
 import random, webbrowser
 import pygame
 import pygame.event as Events
@@ -81,7 +82,7 @@ while running:
         # Loop through each column in the row
         for column in range(MAPWIDTH):
             # Draw the resource at that position in the tilemap
-            screen.blit(textures[tilemap[row][column]], (column * TILESIZE, row * TILESIZE))
+            screen.blit(textures[Grass5], (column * TILESIZE, row * TILESIZE))
     #set Units
     '''screen.blit(mage,(unitPos1[0]*TILESIZE,unitPos1[1]*TILESIZE))'''
     #Game iterarion loop
