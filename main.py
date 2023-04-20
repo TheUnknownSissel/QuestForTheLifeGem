@@ -67,14 +67,15 @@ running = True
 #pygame.draw.rect(screen, MAGENTA, (400, 100, 100, 150))
 
 
-#Starting the game loop
+# Starting the game loop
 while running:
-    #the game events
+    # the game events
     for event in pygame.event.get():
-        #Check for quit event to stop game
+        # Check for quit event to stop game
         if event.type == pygame.QUIT:
             running = False
 
+    # Sets up the map from map.py. Code taken from https://github.com/cmwchoi/PygameFireEmblem/blob/master/Game.py
     for row in range(MAPHEIGHT):
         # Loop through each column in the row
         for column in range(MAPWIDTH):
