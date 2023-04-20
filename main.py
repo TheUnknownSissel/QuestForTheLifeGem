@@ -37,9 +37,9 @@ unitPos3 = [MAPWIDTH-3, MAPHEIGHT-1]
 unitPosList = [unitPos1, unitPos2, unitPos3]
 
 #Initialize Units
-mage = Player("Mage", 70, 3, 1, 3, -5, 10, "Textures/MageTest.png", MAPWIDTH-1, MAPHEIGHT-1)
-warrior = Player("Warrior", 100, 8, 5, 2, 10, 0, "Textures/FighterTest.png", MAPWIDTH-2, MAPHEIGHT-1)
-tank = Player("Tank", 200, 1, 12, 7, 0, 0, "Textures/WarriorTest.png", MAPWIDTH-3, MAPHEIGHT-1)
+mage = Player("Mage", 70, 3, 1, 3, -5, 10, "Textures/MageTest.png", 0, 1, 2)
+warrior = Player("Warrior", 100, 8, 5, 2, 10, 0, "Textures/FighterTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
+tank = Player("Tank", 200, 1, 12, 7, 0, 0, "Textures/WarriorTest.png", 0,  MAPWIDTH-3, MAPHEIGHT-1)
 
 #Create list of these units
 units = [warrior, mage, tank]
@@ -82,14 +82,28 @@ while running:
             # Draw the resource at that position in the tilemap
             screen.blit(textures[tilemap[row][column]], (column * TILESIZE, row * TILESIZE))
     #set Units
+    '''screen.blit(mage,(unitPos1[0]*TILESIZE,unitPos1[1]*TILESIZE))'''
     #Game iterarion loop
     # Pull Unit from unit order list, reset order if need
-    #Check if unit is Player controlable if movement and attack by player
-    # Player controlled - movement, attack, check stats
-    # Enemy controled - AI do the thing (find out what that entails)
+    # Check if unit is Player controlable if movement and attack by player: if GOB (good or bad) is 0 it is a player controlled unit
+    '''
+    for playable in units:
+
+        # Player controlled - movement, attack, check stats
+        if playable.get_GOB() == 0:
+            #impliment a move function/ control here
+
+        # Enemy controled - AI do the thing (find out what that entails)
+        if playable.get_GOB() == 1:
+            #AI movement/ attack here
+    '''
     # Update status of units, check for deaths and remove units
+
     # Check if there are any enemies left or if there are any friendly units left
+
     # Check game over or win is true then move to a win or game over screen
+
     # go back to beginning of loop
+
     pygame.display.update()
 
