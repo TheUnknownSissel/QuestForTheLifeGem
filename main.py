@@ -28,15 +28,6 @@ RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 MAGENTA = (255, 0, 255)
 #Commented out for window testing purposes
-'''
-#Initialize Units
-mage = Player("Mage", 70, 3, 1, 3, -5, 10, "Textures/MageTest.png")
-warrior = Player("Warrior", 100, 8, 5, 2, 10, 0, "Textures/FighterTest.png")
-tank = Player("Tank", 200, 1, 12, 7, 0, 0, "Textures/WarriorTest.png")
-
-
-#Create list of these units
-units = [warrior, mage, tank]
 
 #Create player positions and list of all player positioining
 unitPos1 = [MAPWIDTH-1, MAPHEIGHT-1]
@@ -44,13 +35,22 @@ unitPos2 = [MAPWIDTH-2, MAPHEIGHT-1]
 unitPos3 = [MAPWIDTH-3, MAPHEIGHT-1]
 
 unitPosList = [unitPos1, unitPos2, unitPos3]
+'''
+#Initialize Units
+mage = Player("Mage", 70, 3, 1, 3, -5, 10, "Textures/MageTest.png", MAPWIDTH-1, MAPHEIGHT-1)
+warrior = Player("Warrior", 100, 8, 5, 2, 10, 0, "Textures/FighterTest.png", MAPWIDTH-2, MAPHEIGHT-1)
+tank = Player("Tank", 200, 1, 12, 7, 0, 0, "Textures/WarriorTest.png", MAPWIDTH-3, MAPHEIGHT-1)
+
+#Create list of these units
+units = [warrior, mage, tank]
+'''
+
 
 #Initialize mobs
-#list here for turn order
+#list here for set turn order
 
-#Turn order sort both lists on speed
 
-'''
+
 
 #screen start up - note the way in how I use tilesize and the map dementions was seen from PygameFireEmblem by cmwchoi on GitHub
 screen = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE))
@@ -81,4 +81,15 @@ while running:
         for column in range(MAPWIDTH):
             # Draw the resource at that position in the tilemap
             screen.blit(textures[tilemap[row][column]], (column * TILESIZE, row * TILESIZE))
+    #set Units
+    #Game iterarion loop
+    # Pull Unit from unit order list, reset order if need
+    #Check if unit is Player controlable if movement and attack by player
+    # Player controlled - movement, attack, check stats
+    # Enemy controled - AI do the thing (find out what that entails)
+    # Update status of units, check for deaths and remove units
+    # Check if there are any enemies left or if there are any friendly units left
+    # Check game over or win is true then move to a win or game over screen
+    # go back to beginning of loop
     pygame.display.update()
+

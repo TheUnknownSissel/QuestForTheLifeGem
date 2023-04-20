@@ -9,7 +9,7 @@ CYAN = (0, 255, 255)
 class Player(pygame.sprite.Sprite):
     def __init__(self, name, health, speed, defen, res, atk, type, imageref, positionx, positiony):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface(imageref(32, 32))
+        self.image = pygame.Surface(imageref, (32, 32))
         self.image.fill(CYAN)
         # specify bounding rect for sprite
         self.rect = self.image.get_rect()
