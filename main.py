@@ -13,6 +13,7 @@ from map import *
 #Initialize the pygame
 pygame.init()
 
+
 #Create the window
 background_colour = (0, 133, 66)
 screen_width = 480
