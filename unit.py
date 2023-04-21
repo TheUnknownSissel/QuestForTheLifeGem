@@ -21,14 +21,24 @@ class Player(pygame.sprite.Sprite):
         #why minus 20
         self.rect.bottom = MAPHEIGHT*TILESIZE - 20
         '''
+
+        pygame.sprite.Sprite.__init__(self)
+        self.images = []
+        img = pygame.image.load(os.path.join('Textures', 'WarriorTest.png')).convert()
+        #future implementation
+        '''img = pygame.image.load('Textures', '' + str()).convert()'''
+        self.images.append(img)
+        self.image = self.images[0]
+        self.rect = self.image.get_rect()
         self.name = (name)
         self.health = (health)
         self.speed = (speed)
         self.defen = (defen)
         self.res = (res)
-        self.atk  = (atk)
+        self.atk = (atk)
         self.type = (type)
-        self.image = pygame.image.load(imageref)
+        #outdated
+        '''self.image = pygame.image.load(imageref)'''
         self.GOB = (GOB)
 
 

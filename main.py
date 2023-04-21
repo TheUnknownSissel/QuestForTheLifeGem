@@ -31,6 +31,8 @@ YELLOW = (255, 255, 0)
 MAGENTA = (255, 0, 255)
 #Commented out for window testing purposes
 
+#screen start up - note the way in how I use tilesize and the map dementions was seen from PygameFireEmblem by cmwchoi on GitHub
+screen = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE))
 #Create player positions and list of all player positioining
 unitPos1 = [MAPWIDTH-1, MAPHEIGHT-1]
 unitPos2 = [MAPWIDTH-2, MAPHEIGHT-1]
@@ -39,9 +41,22 @@ unitPos3 = [MAPWIDTH-3, MAPHEIGHT-1]
 unitPosList = [unitPos1, unitPos2, unitPos3]
 
 #Initialize Units
-mage = Player("Mage", 70, 3, 1, 3, -5, 10, "Textures/MageTest.png", 0, 1, 2)
+mage = Player("Mage", 70, 3, 1, 3, -5, 10, "Textures/MageTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
+mage.rect.x = MAPWIDTH-1
+mage.rect.y = MAPHEIGHT-1
+player_list = pygame.sprite.Group()
+player_list.add(mage)
 warrior = Player("Warrior", 100, 8, 5, 2, 10, 0, "Textures/FighterTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
+# ISSUE when spawning multiple units how to get multiple to draw from player_list
+'''warrior.rect.x = MAPWIDTH-2
+warrior.rect.y = MAPHEIGHT-1
+player_list = pygame.sprite.Group()
+player_list.add(warrior)'''
 tank = Player("Tank", 200, 1, 12, 7, 0, 0, "Textures/WarriorTest.png", 0,  MAPWIDTH-3, MAPHEIGHT-1)
+'''tank.rect.x = MAPWIDTH-3
+tank.rect.y = MAPHEIGHT-1
+player_list = pygame.sprite.Group()
+player_list.add(tank)'''
 
 #Create list of these units
 units = [warrior, mage, tank]
@@ -54,8 +69,7 @@ units = [warrior, mage, tank]
 
 
 
-#screen start up - note the way in how I use tilesize and the map dementions was seen from PygameFireEmblem by cmwchoi on GitHub
-screen = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE))
+
 
 #Fill background with background color
 #screen.fill(background_colour)
@@ -84,7 +98,7 @@ while running:
             # Draw the resource at that position in the tilemap
             screen.blit(textures[Grass5], (column * TILESIZE, row * TILESIZE))
     #set Units
-    '''screen.blit(mage,(unitPos1[0]*TILESIZE,unitPos1[1]*TILESIZE))'''
+    player_list.draw(screen)
     #Game iterarion loop
     # Pull Unit from unit order list, reset order if need
     # Check if unit is Player controlable if movement and attack by player: if GOB (good or bad) is 0 it is a player controlled unit
@@ -92,11 +106,11 @@ while running:
     for playable in units:
 
         # Player controlled - movement, attack, check stats
-        if playable.get_GOB() == 0:
+        if mage.get_GOB() == 0:
             #impliment a move function/ control here
 
         # Enemy controled - AI do the thing (find out what that entails)
-        if playable.get_GOB() == 1:
+        if mage.get_GOB() == 1:
             #AI movement/ attack here
     '''
     # Update status of units, check for deaths and remove units
