@@ -113,6 +113,8 @@ while running:
         if mage.get_GOB() == 1:
             #AI movement/ attack here
     '''
+    #move here
+    #mage.move()
     # Update status of units, check for deaths and remove units
 
     # Check if there are any enemies left or if there are any friendly units left
