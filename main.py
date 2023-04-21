@@ -12,8 +12,8 @@ from map import *
 
 #Initialize the pygame
 pygame.init()
-
-
+#initialize music
+pygame.mixer.init()
 #Create the window
 background_colour = (0, 133, 66)
 screen_width = 480
@@ -66,7 +66,7 @@ units = [warrior, mage, tank]
 #list here for set turn order
 
 
-
+#pygame.mixer.music.load(os.path.join('Audio', 'nonstopix-rising-drum-beat-20804.wav'))
 
 
 
@@ -116,7 +116,7 @@ while running:
             #AI movement/ attack here
     '''
     #move here
-
+    #mage.move()
 
 
         # end movement and attack
