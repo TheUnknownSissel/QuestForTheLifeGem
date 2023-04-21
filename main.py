@@ -1,7 +1,6 @@
-
 import random, webbrowser
 import pygame
-import pygame.event as Events
+import pygame.event as EVENTS
 import os
 import sys
 import unit
@@ -85,8 +84,11 @@ running = True
 
 # Starting the game loop
 while running:
+    clock.tick(FPS)
     # the game events
     for event in pygame.event.get():
+        #
+
         # Check for quit event to stop game
         if event.type == pygame.QUIT:
             running = False
@@ -114,7 +116,11 @@ while running:
             #AI movement/ attack here
     '''
     #move here
-    #mage.move()
+
+
+
+        # end movement and attack
+
     # Update status of units, check for deaths and remove units
 
     # Check if there are any enemies left or if there are any friendly units left

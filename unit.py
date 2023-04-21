@@ -4,6 +4,7 @@ import pygame
 import string
 import sys
 from map import *
+import pygame.event as EVENTS
 
 CYAN = (0, 255, 255)
 class Player(pygame.sprite.Sprite):
@@ -104,5 +105,29 @@ class Player(pygame.sprite.Sprite):
             self.set_health(self, healthChangeMag)
 
         return 0
-    #def update(self):
-        #if self.get_health() <= 0:
+
+    def move(self):
+
+
+
+        dis = self.get_speed()
+        x = self.rect.x
+        y = self.rect.y
+        c = 0
+
+        while c <= dis:
+            key_state = pygame.key.get_pressed()
+            if key_state[pygame.K_LEFT]:
+                self.rect = x -1
+            if key_state[pygame.K_RIGHT]:
+                self.rect = x + 1
+            if key_state[pygame.K_UP]:
+                self.rect = y + 1
+            if key_state[pygame.K_DOWN]:
+                self.rect = y - 1
+            # end movement and attack
+
+    '''
+    def update(self):
+        if self.get_health() <= 0:
+    '''
