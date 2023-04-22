@@ -115,9 +115,13 @@ while running:
         if mage.get_GOB() == 1:
             #AI movement/ attack here
     '''
-    #move here
-    #mage.move()
 
+
+
+
+    #move here
+    mage.move()
+    pygame.display.flip()
 
         # end movement and attack
 
