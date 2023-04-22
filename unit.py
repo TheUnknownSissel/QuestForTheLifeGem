@@ -9,25 +9,12 @@ import pygame.event as EVENTS
 CYAN = (0, 255, 255)
 class Player(pygame.sprite.Sprite):
     def __init__(self, name, health, speed, defen, res, atk, type, imageref, GOB, positionx, positiony):
-        '''
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface(imageref, (32, 32))
-        self.image.fill(CYAN)
-        # specify bounding rect for sprite
-        self.rect = self.image.get_rect()
-        # specify random start posn & speed of enemies
-        self.rect.x = positionx
-        self.rect.y = positiony
-        self.rect.centerx = MAPWIDTH*TILESIZE / 2
-        #why minus 20
-        self.rect.bottom = MAPHEIGHT*TILESIZE - 20
-        '''
 
         pygame.sprite.Sprite.__init__(self)
         self.images = []
-        img = pygame.image.load(os.path.join('Textures', 'WarriorTest.png')).convert()
+        img = pygame.image.load(os.path.join('Textures', 'MageTest.png')).convert()
         #future implementation
-        '''img = pygame.image.load('Textures', '' + str()).convert()'''
+        #img = pygame.image.load(os.path.join('Textures', str(imageref))).convert()
         self.images.append(img)
         self.image = self.images[0]
         self.rect = self.image.get_rect()
@@ -113,27 +100,34 @@ class Player(pygame.sprite.Sprite):
         y = self.rect.y
         c = 0
 
-
         key_state = pygame.key.get_pressed()
         if key_state[pygame.K_LEFT]:
-            self.rect.x = x -1
+            self.rect.x = x -32
             dis = dis + 1
 
         if key_state[pygame.K_RIGHT]:
-            self.rect.x = x + 1
+            self.rect.x = x + 32
             dis = dis + 1
 
         if key_state[pygame.K_UP]:
-            self.rect.y = y + 1
+            self.rect.y = y - 32
             dis = dis + 1
-
+            #update to ckeck for bounding
         if key_state[pygame.K_DOWN]:
-            self.rect.y = y - 1
+            self.rect.y = y + 32
             dis = dis + 1
 
 
 
-    '''
+
     def update(self):
         if self.get_health() <= 0:
-    '''
+            self.kill()
+        if self.rect.top < MAXTOP:
+            self.rect.top = MAXTOP
+        if self.rect.left < MAXLEFT:
+            self.rect.left = MAXLEFT
+        if self.rect.right > MAXRIGHT:
+            self.rect.right = MAXRIGHT
+        if self.rect.bottom > MAXBOTTOM:
+            self.rect.bottom = MAXBOTTOM

@@ -120,9 +120,10 @@ while running:
 
 
     #move here
+    #for x in range(1,mage.set_speed()):
     mage.move()
     pygame.display.flip()
-
+    mage.update()
         # end movement and attack
 
     # Update status of units, check for deaths and remove units
