@@ -20,6 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.name = (name)
         self.health = (health)
+        self.max_health = (health)
         self.speed = (speed)
         self.defen = (defen)
         self.res = (res)
@@ -102,19 +103,19 @@ class Player(pygame.sprite.Sprite):
 
         key_state = pygame.key.get_pressed()
         if key_state[pygame.K_LEFT]:
-            self.rect.x = x -32
+            self.rect.x = x -4
             dis = dis + 1
 
         if key_state[pygame.K_RIGHT]:
-            self.rect.x = x + 32
+            self.rect.x = x + 4
             dis = dis + 1
 
         if key_state[pygame.K_UP]:
-            self.rect.y = y - 32
+            self.rect.y = y - 4
             dis = dis + 1
             #update to ckeck for bounding
         if key_state[pygame.K_DOWN]:
-            self.rect.y = y + 32
+            self.rect.y = y + 4
             dis = dis + 1
 
 

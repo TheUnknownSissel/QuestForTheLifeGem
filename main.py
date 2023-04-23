@@ -28,10 +28,15 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 MAGENTA = (255, 0, 255)
-#Commented out for window testing purposes
 
 #screen start up - note the way in how I use tilesize and the map dementions was seen from PygameFireEmblem by cmwchoi on GitHub
-screen = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE))
+#200 is there for box containing unit information
+screen = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE + 200))
+
+# initialize fonts for displaying unit information
+label_font = pygame.font.SysFont(pygame.font.get_default_font(), 50)
+stats_font = pygame.font.SysFont(pygame.font.get_default_font(), 30)
+
 #Create player positions and list of all player positioining
 unitPos1 = [MAPWIDTH-1, MAPHEIGHT-1]
 unitPos2 = [MAPWIDTH-2, MAPHEIGHT-1]
@@ -115,6 +120,46 @@ while running:
         if mage.get_GOB() == 1:
             #AI movement/ attack here
     '''
+    # Textbox Contents
+    '''
+    Note: For now, this is coded for only the mage. Will be turned into a method to account for all units  .
+    TO DO: Update with adjusted unit type and drawn picture of unit (when added to unit class)
+    '''
+    # Set up name of unit on screen
+    name_text = label_font.render(mage.name, True, (255, 255, 255))
+    # For centering the text for unit's name
+    name_text_rect = name_text.get_rect()
+    name_text_rect.center = (400, MAPHEIGHT*TILESIZE + 20)
+    # Place name in top middle of textbox
+    screen.blit(name_text, name_text_rect)
+
+    # Health: will be updated if a unit takes damage. Displays both current and max health
+    '''
+    TO DO: Consider adding a health bar: stretch goal?
+    '''
+    health_text = stats_font.render('HP: ' + str(mage.health) + '/' + str(mage.max_health), True, (255, 255, 255))
+    health_text_rect = name_text.get_rect()
+    health_text_rect.center = (400, MAPHEIGHT * TILESIZE + 60)
+    screen.blit(health_text, health_text_rect)
+
+    # Atk
+    atk_text = stats_font.render('Attack: ' + str(mage.atk), True, (255, 255, 255))
+    screen.blit(atk_text, (200, MAPHEIGHT * TILESIZE + 80))
+
+    #Type
+    '''
+    TO DO: Fix display when type variable is agreed upon
+    '''
+    type_text = stats_font.render('Unit Type: ' + 'INSERT TYPE HERE', True, (255, 255, 255))
+    screen.blit(type_text, (500, MAPHEIGHT * TILESIZE + 80))
+
+    # Def
+    def_text = stats_font.render('Defense: ' + str(mage.defen), True, (255, 255, 255))
+    screen.blit(def_text, (200, MAPHEIGHT * TILESIZE + 140))
+
+    # Res
+    res_text = stats_font.render('Resistance: ' + str(mage.res), True, (255, 255, 255))
+    screen.blit(res_text, (500, MAPHEIGHT * TILESIZE + 140))
 
 
 
