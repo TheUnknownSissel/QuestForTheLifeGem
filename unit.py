@@ -12,7 +12,7 @@ class Player(pygame.sprite.Sprite):
 
         pygame.sprite.Sprite.__init__(self)
         self.images = []
-        img = pygame.image.load(os.path.join('Textures', 'MageTest.png')).convert()
+        img = pygame.image.load(os.path.join('Textures', imageref)).convert()
         #future implementation
         #img = pygame.image.load(os.path.join('Textures', str(imageref))).convert()
         self.images.append(img)

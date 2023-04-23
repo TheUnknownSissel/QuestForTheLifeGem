@@ -30,12 +30,49 @@ YELLOW = (255, 255, 0)
 MAGENTA = (255, 0, 255)
 
 #screen start up - note the way in how I use tilesize and the map dementions was seen from PygameFireEmblem by cmwchoi on GitHub
-#200 is there for box containing unit information
-screen = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE + 200))
+#150 is there for box containing unit information
+screen = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE + 150))
 
 # initialize fonts for displaying unit information
-label_font = pygame.font.SysFont(pygame.font.get_default_font(), 50)
-stats_font = pygame.font.SysFont(pygame.font.get_default_font(), 30)
+label_font = pygame.font.SysFont('gabriola', 40)
+stats_font = pygame.font.SysFont('gabriola', 30)
+
+def display_unit_data(character):
+    # Sets up display for given character of type Player stats
+
+    # Set up name of character on screen
+    name_text = label_font.render(character.name, True, (255, 255, 255))
+    # For centering the text for character's name
+    name_text_rect = name_text.get_rect()
+    name_text_rect.center = (325, MAPHEIGHT*TILESIZE + 20)
+    # Place name in top middle of textbox
+    screen.blit(name_text, name_text_rect)
+
+    # Health: will be updated if a character takes damage. Displays both current and max health
+    '''
+    TO DO: Consider adding a health bar: stretch goal?
+    '''
+    health_text = stats_font.render('HP: ' + str(character.health) + '/' + str(character.max_health), True, (255, 255, 255))
+    health_text_rect = name_text.get_rect()
+    health_text_rect.center = (325, MAPHEIGHT * TILESIZE + 60)
+    screen.blit(health_text, health_text_rect)
+
+    # Atk
+    atk_text = stats_font.render('Attack: ' + str(character.atk), True, (255, 255, 255))
+    screen.blit(atk_text, (200, MAPHEIGHT * TILESIZE + 75))
+
+    #Type
+    type_text = stats_font.render('Unit Type: ' + str(character.type), True, (255, 255, 255))
+    screen.blit(type_text, (350, MAPHEIGHT * TILESIZE + 75))
+
+    # Def
+    def_text = stats_font.render('Defense: ' + str(character.defen), True, (255, 255, 255))
+    screen.blit(def_text, (200, MAPHEIGHT * TILESIZE + 100))
+
+    # Res
+    res_text = stats_font.render('Resistance: ' + str(character.res), True, (255, 255, 255))
+    screen.blit(res_text, (350, MAPHEIGHT * TILESIZE + 100))
+
 
 #Create player positions and list of all player positioining
 unitPos1 = [MAPWIDTH-1, MAPHEIGHT-1]
@@ -45,18 +82,18 @@ unitPos3 = [MAPWIDTH-3, MAPHEIGHT-1]
 unitPosList = [unitPos1, unitPos2, unitPos3]
 
 #Initialize Units
-mage = Player("Mage", 70, 3, 1, 3, -5, "Magical", "Textures/MageTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
+mage = Player("Mage", 70, 3, 1, 3, -5, "Magical", "MageTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
 mage.rect.x = MAPWIDTH-1
 mage.rect.y = MAPHEIGHT-1
 player_list = pygame.sprite.Group()
 player_list.add(mage)
-warrior = Player("Warrior", 100, 8, 5, 2, 10, "Physical", "Textures/FighterTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
+warrior = Player("Warrior", 100, 8, 5, 2, 10, "Physical", "FighterTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
 # ISSUE when spawning multiple units how to get multiple to draw from player_list
 '''warrior.rect.x = MAPWIDTH-2
 warrior.rect.y = MAPHEIGHT-1
 player_list = pygame.sprite.Group()
 player_list.add(warrior)'''
-tank = Player("Tank", 200, 1, 12, 7, 0, "Physical", "Textures/WarriorTest.png", 0,  MAPWIDTH-3, MAPHEIGHT-1)
+tank = Player("Tank", 200, 1, 12, 7, 0, "Physical", "WarriorTest.png", 0,  MAPWIDTH-3, MAPHEIGHT-1)
 '''tank.rect.x = MAPWIDTH-3
 tank.rect.y = MAPHEIGHT-1
 player_list = pygame.sprite.Group()
@@ -92,7 +129,6 @@ while running:
     clock.tick(FPS)
     # the game events
     for event in pygame.event.get():
-        #
 
         # Check for quit event to stop game
         if event.type == pygame.QUIT:
@@ -120,45 +156,8 @@ while running:
         if mage.get_GOB() == 1:
             #AI movement/ attack here
     '''
-    # Textbox Contents
-    '''
-    Note: For now, this is coded for only the mage. Will be turned into a method to account for all units  .
-    TO DO: Update with adjusted unit type and drawn picture of unit (when added to unit class)
-    '''
-    # Set up name of unit on screen
-    name_text = label_font.render(mage.name, True, (255, 255, 255))
-    # For centering the text for unit's name
-    name_text_rect = name_text.get_rect()
-    name_text_rect.center = (400, MAPHEIGHT*TILESIZE + 20)
-    # Place name in top middle of textbox
-    screen.blit(name_text, name_text_rect)
-
-    # Health: will be updated if a unit takes damage. Displays both current and max health
-    '''
-    TO DO: Consider adding a health bar: stretch goal?
-    '''
-    health_text = stats_font.render('HP: ' + str(mage.health) + '/' + str(mage.max_health), True, (255, 255, 255))
-    health_text_rect = name_text.get_rect()
-    health_text_rect.center = (400, MAPHEIGHT * TILESIZE + 60)
-    screen.blit(health_text, health_text_rect)
-
-    # Atk
-    atk_text = stats_font.render('Attack: ' + str(mage.atk), True, (255, 255, 255))
-    screen.blit(atk_text, (200, MAPHEIGHT * TILESIZE + 80))
-
-    #Type
-    type_text = stats_font.render('Unit Type: ' + str(mage.type), True, (255, 255, 255))
-    screen.blit(type_text, (500, MAPHEIGHT * TILESIZE + 80))
-
-    # Def
-    def_text = stats_font.render('Defense: ' + str(mage.defen), True, (255, 255, 255))
-    screen.blit(def_text, (200, MAPHEIGHT * TILESIZE + 140))
-
-    # Res
-    res_text = stats_font.render('Resistance: ' + str(mage.res), True, (255, 255, 255))
-    screen.blit(res_text, (500, MAPHEIGHT * TILESIZE + 140))
-
-
+    # Display stats of current character
+    display_unit_data(mage)
 
 
     #move here
