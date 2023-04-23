@@ -45,18 +45,18 @@ unitPos3 = [MAPWIDTH-3, MAPHEIGHT-1]
 unitPosList = [unitPos1, unitPos2, unitPos3]
 
 #Initialize Units
-mage = Player("Mage", 70, 3, 1, 3, -5, 10, "Textures/MageTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
+mage = Player("Mage", 70, 3, 1, 3, -5, "Magical", "Textures/MageTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
 mage.rect.x = MAPWIDTH-1
 mage.rect.y = MAPHEIGHT-1
 player_list = pygame.sprite.Group()
 player_list.add(mage)
-warrior = Player("Warrior", 100, 8, 5, 2, 10, 0, "Textures/FighterTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
+warrior = Player("Warrior", 100, 8, 5, 2, 10, "Physical", "Textures/FighterTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
 # ISSUE when spawning multiple units how to get multiple to draw from player_list
 '''warrior.rect.x = MAPWIDTH-2
 warrior.rect.y = MAPHEIGHT-1
 player_list = pygame.sprite.Group()
 player_list.add(warrior)'''
-tank = Player("Tank", 200, 1, 12, 7, 0, 0, "Textures/WarriorTest.png", 0,  MAPWIDTH-3, MAPHEIGHT-1)
+tank = Player("Tank", 200, 1, 12, 7, 0, "Physical", "Textures/WarriorTest.png", 0,  MAPWIDTH-3, MAPHEIGHT-1)
 '''tank.rect.x = MAPWIDTH-3
 tank.rect.y = MAPHEIGHT-1
 player_list = pygame.sprite.Group()
@@ -147,10 +147,7 @@ while running:
     screen.blit(atk_text, (200, MAPHEIGHT * TILESIZE + 80))
 
     #Type
-    '''
-    TO DO: Fix display when type variable is agreed upon
-    '''
-    type_text = stats_font.render('Unit Type: ' + 'INSERT TYPE HERE', True, (255, 255, 255))
+    type_text = stats_font.render('Unit Type: ' + str(mage.type), True, (255, 255, 255))
     screen.blit(type_text, (500, MAPHEIGHT * TILESIZE + 80))
 
     # Def

@@ -93,7 +93,27 @@ class Player(pygame.sprite.Sprite):
             self.set_health(self, healthChangeMag)
 
         return 0
+    ''' Here's my interpretation of the take_damage function. Please try testing this
+    
+    #This is a function to calcuate how much damage is taken when a unit is attacked 
+    def calculate_damage(self, enemy_atk, enemy_type):
+        # Initialize the variable to store how much damage will be taken
+        total_damage = 0
+        # If enemy type is physical, calculate damage by subtracting unit's defen 
+        # from enemy's atk
+        if enemy_type == "Physical":
+            total_damage = enemy_atk - self.defen
+            
+        # Else, if enemy type is magical, calculate damage by subtracting unit's res 
+        # from enemy's atk
+        else:
+            total_damage = enemy_atk - self.res
+            
+        # Prevent unit from taking negative damage
+        if total_damage > 0:
+            self.health = self.health - total_damage
 
+    '''
     def move(self):
 
         dis = self.get_speed()
