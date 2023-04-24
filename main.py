@@ -176,13 +176,13 @@ while running:
 
     #where true is have the damage function take place. this was found from pygame.org and the proffesors
     collisions = pygame.sprite.groupcollide(baddie_list, player_list, False, False)
-    # add more mobs for those hit and deleted by projectiles
     for collision in collisions:
 
         baddie.calculate_damage(mage.get_atk(), mage.get_type())
         #for testing purposes only
         print(baddie.get_health())
     if pygame.sprite.collide_rect(mage, baddie):
+        #needs to change for the future
         mage.rect.x += 1 + mage.rect.x
 
     # end movement and attack
