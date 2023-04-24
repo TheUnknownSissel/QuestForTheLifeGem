@@ -79,6 +79,10 @@ class Player(pygame.sprite.Sprite):
     def get_GOB(self):
         return self.GOB
     #out dated
+    def get_maxhealth(self):
+        return self.max_health
+    def set_maxhealth(self):
+        return self.max_health
     '''
     def take_damage (self, damage, magdamage):
         defen = self.get_defen()
@@ -138,7 +142,6 @@ class Player(pygame.sprite.Sprite):
             #update to ckeck for bounding
         if key_state[pygame.K_DOWN]:
             self.rect.y = y + 4
-            dis = dis + 1
 
 
 
