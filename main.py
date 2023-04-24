@@ -99,7 +99,7 @@ tank.rect.y = MAPHEIGHT-1
 player_list = pygame.sprite.Group()
 player_list.add(tank)'''
 
-baddie = Player("badguy", 100000, 1, 12, 7, 0, "Physical", "WarriorTest.png", 0,  MAPWIDTH-3, MAPHEIGHT-1)
+baddie = Player("badguy", 100000, 1, 12, 7, 40, "Physical", "WarriorTest.png", 0,  MAPWIDTH-3, MAPHEIGHT-1)
 baddie.rect.x = MAPWIDTH * TILESIZE - 325
 baddie.rect.y = MAPHEIGHT * TILESIZE - 325
 baddie_list =pygame.sprite.Group()
@@ -129,6 +129,18 @@ running = True
 #pygame.draw.rect(screen, MAGENTA, (400, 100, 100, 150))
 
 tracker = 0
+def touch():
+    # this was found from pygame.org and the professor's code
+    collisions = pygame.sprite.groupcollide(baddie_list, player_list, False, False)
+    for collision in collisions:
+        baddie.calculate_damage(mage.get_atk(), mage.get_type())
+        mage.calculate_damage(baddie.get_atk(), baddie.get_type())
+        # for testing purposes only
+        print(baddie.get_health())
+        print(mage.get_health())
+    if pygame.sprite.collide_rect(mage, baddie):
+        # needs to change for the future
+        mage.rect.x += 1 + mage.rect.x
 
 # Starting the game loop
 while running:
@@ -173,17 +185,8 @@ while running:
     mage.move()
     pygame.display.flip()
     mage.update()
+    touch()
 
-    #where true is have the damage function take place. this was found from pygame.org and the proffesors
-    collisions = pygame.sprite.groupcollide(baddie_list, player_list, False, False)
-    for collision in collisions:
-
-        baddie.calculate_damage(mage.get_atk(), mage.get_type())
-        #for testing purposes only
-        print(baddie.get_health())
-    if pygame.sprite.collide_rect(mage, baddie):
-        #needs to change for the future
-        mage.rect.x += 1 + mage.rect.x
 
     # end movement and attack
 
