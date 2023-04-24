@@ -141,8 +141,8 @@ def touch():
     # this was found from pygame.org and the professor's code
     collisions = pygame.sprite.groupcollide(baddie_list, player_list, False, False)
     for collision in collisions:
-        baddie.calculate_damage(mage.get_atk(), mage.get_type())
-        mage.calculate_damage(baddie.get_atk(), baddie.get_type())
+        baddie.take_damage(mage.get_atk(), mage.get_type())
+        mage.take_damage(baddie.get_atk(), baddie.get_type())
         # for testing purposes only
         print(baddie.get_current_health())
         print(mage.get_current_health())

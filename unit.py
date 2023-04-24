@@ -126,7 +126,13 @@ class Player(pygame.sprite.Sprite):
         # from enemy's atk
         else:
             total_damage = enemy_atk - self.res
-            
+        # returns value of total_damage
+        return total_damage
+
+    # This function allows a unit to take damage
+    def take_damage(self, enemy_atk, enemy_type):
+        # get the total damage taken using calculate_damage
+        total_damage = self.calculate_damage(enemy_atk, enemy_type)
         # Prevent unit from taking negative damage
         if total_damage > 0:
             # Update previous_health to value of current_health
