@@ -180,7 +180,10 @@ while running:
     for collision in collisions:
 
         baddie.calculate_damage(mage.get_atk(), mage.get_type())
+        #for testing purposes only
         print(baddie.get_health())
+    if pygame.sprite.collide_rect(mage, baddie):
+        mage.rect.x += 1 + mage.rect.x
 
     # end movement and attack
 
@@ -191,6 +194,6 @@ while running:
     # Check game over or win is true then move to a win or game over screen
 
     # go back to beginning of loop
-
+    # checks for death
     pygame.display.update()
 
