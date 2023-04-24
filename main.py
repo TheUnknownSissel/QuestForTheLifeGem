@@ -82,7 +82,7 @@ unitPos3 = [MAPWIDTH-3, MAPHEIGHT-1]
 unitPosList = [unitPos1, unitPos2, unitPos3]
 
 #Initialize Units
-mage = Player("Mage", 70, 3, 1, 3, -5, "Magical", "MageTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
+mage = Player("Mage", 70, 3, 1, 3, 100, "Magical", "MageTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
 mage.rect.x = MAPWIDTH-32
 mage.rect.y = MAPHEIGHT-32
 player_list = pygame.sprite.Group()
@@ -99,7 +99,7 @@ tank.rect.y = MAPHEIGHT-1
 player_list = pygame.sprite.Group()
 player_list.add(tank)'''
 
-baddie = Player("badguy", 200, 1, 12, 7, 0, "Physical", "WarriorTest.png", 0,  MAPWIDTH-3, MAPHEIGHT-1)
+baddie = Player("badguy", 100000, 1, 12, 7, 0, "Physical", "WarriorTest.png", 0,  MAPWIDTH-3, MAPHEIGHT-1)
 baddie.rect.x = MAPWIDTH * TILESIZE - 325
 baddie.rect.y = MAPHEIGHT * TILESIZE - 325
 baddie_list =pygame.sprite.Group()
@@ -149,7 +149,6 @@ while running:
     #set Units
     player_list.draw(screen)
     baddie_list.draw(screen)
-
     #Game iterarion loop
     # Pull Unit from unit order list, reset order if need
     # Check if unit is Player controlable if movement and attack by player: if GOB (good or bad) is 0 it is a player controlled unit
@@ -174,6 +173,15 @@ while running:
     mage.move()
     pygame.display.flip()
     mage.update()
+
+    #where true is have the damage function take place. this was found from pygame.org and the proffesors
+    collisions = pygame.sprite.groupcollide(baddie_list, player_list, False, False)
+    # add more mobs for those hit and deleted by projectiles
+    for collision in collisions:
+
+        baddie.calculate_damage(mage.get_atk(), mage.get_type())
+        print(baddie.get_health())
+
     # end movement and attack
 
     # Update status of units, check for deaths and remove units

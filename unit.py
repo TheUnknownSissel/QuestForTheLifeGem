@@ -144,8 +144,6 @@ class Player(pygame.sprite.Sprite):
             self.rect.y = y + 4
 
 
-
-
     def update(self):
         if self.get_health() <= 0:
             self.kill()
