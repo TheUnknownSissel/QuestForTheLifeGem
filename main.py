@@ -39,7 +39,6 @@ stats_font = pygame.font.SysFont('gabriola', 30)
 
 def display_unit_data(character):
     # Sets up display for given character of type Player stats
-
     # Set up name of character on screen
     name_text = label_font.render(character.name, True, (255, 255, 255))
     # For centering the text for character's name
@@ -49,12 +48,14 @@ def display_unit_data(character):
     screen.blit(name_text, name_text_rect)
 
     # Health: will be updated if a character takes damage. Displays both current and max health
-    # Remove previous health by dawing over in black
+    # Remove previous health by drawing over in black
+    '''
+    TO DO: Consider moving to collision function         
+    '''
     health_text = stats_font.render('HP: ' + str(character.previous_health) + '/' + str(character.max_health), True, (0, 0, 0))
     health_text_rect = name_text.get_rect()
     health_text_rect.center = (325, MAPHEIGHT * TILESIZE + 60)
     screen.blit(health_text, health_text_rect)
-
     # Place value of current health on screen
     health_text = stats_font.render('HP: ' + str(character.current_health) + '/' + str(character.max_health), True, (255, 255, 255))
     health_text_rect = name_text.get_rect()

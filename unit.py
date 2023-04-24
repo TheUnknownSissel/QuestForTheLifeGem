@@ -14,10 +14,11 @@ class Player(pygame.sprite.Sprite):
         # imageref: the sprite
         self.images = []
         img = pygame.image.load(os.path.join('Textures', imageref)).convert()
+        img.set_colorkey((0, 0, 0))
         self.images.append(img)
         self.image = self.images[0]
         self.rect = self.image.get_rect()
-        # Character portrait for stats display
+        # Character portrait for stats display. All portraits were drawn by Katherine
         self.portrait = pygame.image.load(os.path.join('Textures', portrait)).convert()
         # Name of the character
         self.name = (name)
