@@ -40,7 +40,7 @@ stats_font = pygame.font.SysFont('gabriola', 30)
 def display_unit_data(character):
     # Sets up display for given character of type Player stats
     # Set up name of character on screen
-    name_text = label_font.render(character.name, True, (255, 255, 255))
+    name_text = label_font.render(character.name, True, WHITE)
     # For centering the text for character's name
     name_text_rect = name_text.get_rect()
     name_text_rect.center = (325, MAPHEIGHT*TILESIZE + 20)
@@ -52,34 +52,40 @@ def display_unit_data(character):
     '''
     TO DO: Consider moving to collision function         
     '''
-    health_text = stats_font.render('HP: ' + str(character.previous_health) + '/' + str(character.max_health), True, (0, 0, 0))
+    health_text = stats_font.render('HP: ' + str(character.previous_health) + '/' + str(character.max_health), True, BLACK)
     health_text_rect = name_text.get_rect()
     health_text_rect.center = (325, MAPHEIGHT * TILESIZE + 60)
     screen.blit(health_text, health_text_rect)
     # Place value of current health on screen
-    health_text = stats_font.render('HP: ' + str(character.current_health) + '/' + str(character.max_health), True, (255, 255, 255))
+    health_text = stats_font.render('HP: ' + str(character.current_health) + '/' + str(character.max_health), True, WHITE)
     health_text_rect = name_text.get_rect()
     health_text_rect.center = (325, MAPHEIGHT * TILESIZE + 60)
     screen.blit(health_text, health_text_rect)
 
     # Atk
-    atk_text = stats_font.render('Attack: ' + str(character.atk), True, (255, 255, 255))
+    atk_text = stats_font.render('Attack: ' + str(character.atk), True, WHITE)
     screen.blit(atk_text, (200, MAPHEIGHT * TILESIZE + 75))
 
     #Type
-    type_text = stats_font.render('Unit Type: ' + str(character.type), True, (255, 255, 255))
+    type_text = stats_font.render('Unit Type: ' + str(character.type), True, WHITE)
     screen.blit(type_text, (350, MAPHEIGHT * TILESIZE + 75))
 
     # Def
-    def_text = stats_font.render('Defense: ' + str(character.defen), True, (255, 255, 255))
+    def_text = stats_font.render('Defense: ' + str(character.defen), True, WHITE)
     screen.blit(def_text, (200, MAPHEIGHT * TILESIZE + 100))
 
     # Res
-    res_text = stats_font.render('Resistance: ' + str(character.res), True, (255, 255, 255))
+    res_text = stats_font.render('Resistance: ' + str(character.res), True, WHITE)
     screen.blit(res_text, (350, MAPHEIGHT * TILESIZE + 100))
 
     # Portrait
     screen.blit(character.portrait, (25, MAPHEIGHT * TILESIZE + 10))
+
+
+# Blacks out the stats menu for updating displayed information
+def reset_menu():
+    # Creates a black box to cover the old data so new data could be displayed
+    pygame.draw.rect(screen, BLACK, (0, 640, 640, 150))
 
 
 #Create player positions and list of all player positioining
@@ -185,6 +191,7 @@ while running:
     '''
     # Display stats of current character
     display_unit_data(mage)
+
 
 
     #move here
