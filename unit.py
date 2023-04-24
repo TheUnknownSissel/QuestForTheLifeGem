@@ -13,14 +13,13 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.images = []
         img = pygame.image.load(os.path.join('Textures', imageref)).convert()
-        #future implementation
-        #img = pygame.image.load(os.path.join('Textures', str(imageref))).convert()
         self.images.append(img)
         self.image = self.images[0]
         self.rect = self.image.get_rect()
         self.name = (name)
-        self.health = (health)
+        self.current_health = (health)
         self.max_health = (health)
+        self.previous_health = (health)
         self.speed = (speed)
         self.defen = (defen)
         self.res = (res)
@@ -37,8 +36,8 @@ class Player(pygame.sprite.Sprite):
     def set_name(self, n):
         self.name = n
 
-    def set_health(self, h):
-        self.health = h
+    def set_current_health(self, h):
+        self.current_health = h
 
     def set_speed(self, s):
         self.speed = s
@@ -58,8 +57,8 @@ class Player(pygame.sprite.Sprite):
     def get_name(self):
         return self.name
 
-    def get_health(self):
-        return self.health
+    def get_current_health(self):
+        return self.current_health
 
     def get_speed(self):
         return self.speed
@@ -117,7 +116,10 @@ class Player(pygame.sprite.Sprite):
             
         # Prevent unit from taking negative damage
         if total_damage > 0:
-            self.health = self.health - total_damage
+            # Update previous_health to value of current_health
+            self.previous_health = self.current_health
+            # Update current health to account for damage
+            self.current_health = self.current_health - total_damage
 
 
     def move(self):
@@ -145,7 +147,7 @@ class Player(pygame.sprite.Sprite):
 
 
     def update(self):
-        if self.get_health() <= 0:
+        if self.get_current_health() <= 0:
             self.kill()
         if self.rect.top < MAXTOP:
             self.rect.top = MAXTOP

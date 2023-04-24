@@ -49,10 +49,14 @@ def display_unit_data(character):
     screen.blit(name_text, name_text_rect)
 
     # Health: will be updated if a character takes damage. Displays both current and max health
-    '''
-    TO DO: Consider adding a health bar: stretch goal?
-    '''
-    health_text = stats_font.render('HP: ' + str(character.health) + '/' + str(character.max_health), True, (255, 255, 255))
+    # Remove previous health by dawing over in black
+    health_text = stats_font.render('HP: ' + str(character.previous_health) + '/' + str(character.max_health), True, (0, 0, 0))
+    health_text_rect = name_text.get_rect()
+    health_text_rect.center = (325, MAPHEIGHT * TILESIZE + 60)
+    screen.blit(health_text, health_text_rect)
+
+    # Place value of current health on screen
+    health_text = stats_font.render('HP: ' + str(character.current_health) + '/' + str(character.max_health), True, (255, 255, 255))
     health_text_rect = name_text.get_rect()
     health_text_rect.center = (325, MAPHEIGHT * TILESIZE + 60)
     screen.blit(health_text, health_text_rect)
@@ -136,8 +140,8 @@ def touch():
         baddie.calculate_damage(mage.get_atk(), mage.get_type())
         mage.calculate_damage(baddie.get_atk(), baddie.get_type())
         # for testing purposes only
-        print(baddie.get_health())
-        print(mage.get_health())
+        print(baddie.get_current_health())
+        print(mage.get_current_health())
     if pygame.sprite.collide_rect(mage, baddie):
         # needs to change for the future
         mage.rect.x += 1 + mage.rect.x
