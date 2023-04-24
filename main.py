@@ -77,6 +77,9 @@ def display_unit_data(character):
     res_text = stats_font.render('Resistance: ' + str(character.res), True, (255, 255, 255))
     screen.blit(res_text, (350, MAPHEIGHT * TILESIZE + 100))
 
+    # Portrait
+    screen.blit(character.portrait, (25, MAPHEIGHT * TILESIZE + 10))
+
 
 #Create player positions and list of all player positioining
 unitPos1 = [MAPWIDTH-1, MAPHEIGHT-1]
@@ -86,24 +89,24 @@ unitPos3 = [MAPWIDTH-3, MAPHEIGHT-1]
 unitPosList = [unitPos1, unitPos2, unitPos3]
 
 #Initialize Units
-mage = Player("Mage", 70, 3, 1, 3, 100, "Magical", "MageTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
+mage = Player("Mage", 70, 3, 1, 3, 100, "Magical", "MageTest.png", "mage_portrait.jpeg", 0, MAPWIDTH-2, MAPHEIGHT-1)
 mage.rect.x = MAPWIDTH-32
 mage.rect.y = MAPHEIGHT-32
 player_list = pygame.sprite.Group()
 player_list.add(mage)
-warrior = Player("Warrior", 100, 8, 5, 2, 10, "Physical", "FighterTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
+warrior = Player("Warrior", 100, 8, 5, 2, 10, "Physical", "FighterTest.png", "fighter_portrait.jpeg", 0, MAPWIDTH-2, MAPHEIGHT-1)
 # ISSUE when spawning multiple units how to get multiple to draw from player_list
 '''warrior.rect.x = MAPWIDTH-2
 warrior.rect.y = MAPHEIGHT-1
 player_list = pygame.sprite.Group()
 player_list.add(warrior)'''
-tank = Player("Tank", 200, 1, 12, 7, 0, "Physical", "WarriorTest.png", 0,  MAPWIDTH-3, MAPHEIGHT-1)
+tank = Player("Tank", 200, 1, 12, 7, 0, "Physical", "WarriorTest.png", "knight_portrait.jpeg", 0,  MAPWIDTH-3, MAPHEIGHT-1)
 '''tank.rect.x = MAPWIDTH-3
 tank.rect.y = MAPHEIGHT-1
 player_list = pygame.sprite.Group()
 player_list.add(tank)'''
 
-baddie = Player("badguy", 100000, 1, 12, 7, 40, "Physical", "WarriorTest.png", 0,  MAPWIDTH-3, MAPHEIGHT-1)
+baddie = Player("badguy", 100000, 1, 12, 7, 40, "Physical", "WarriorTest.png", "thief_portrait.jpeg", 0,  MAPWIDTH-3, MAPHEIGHT-1)
 baddie.rect.x = MAPWIDTH * TILESIZE - 325
 baddie.rect.y = MAPHEIGHT * TILESIZE - 325
 baddie_list =pygame.sprite.Group()

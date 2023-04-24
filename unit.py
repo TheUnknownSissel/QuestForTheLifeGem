@@ -8,22 +8,34 @@ import pygame.event as EVENTS
 
 CYAN = (0, 255, 255)
 class Player(pygame.sprite.Sprite):
-    def __init__(self, name, health, speed, defen, res, atk, type, imageref, GOB, positionx, positiony):
+    def __init__(self, name, health, speed, defen, res, atk, type, imageref, portrait, GOB, positionx, positiony):
 
         pygame.sprite.Sprite.__init__(self)
+        # imageref: the sprite
         self.images = []
         img = pygame.image.load(os.path.join('Textures', imageref)).convert()
         self.images.append(img)
         self.image = self.images[0]
         self.rect = self.image.get_rect()
+        # Character portrait for stats display
+        self.portrait = pygame.image.load(os.path.join('Textures', portrait)).convert()
+        # Name of the character
         self.name = (name)
+        # Current health of the character: if this reaches 0, the character is removed from the field
         self.current_health = (health)
+        # Maximum health of the character
         self.max_health = (health)
+        # Previous health of the character: for updating screen when damage is taken
         self.previous_health = (health)
+        # Speed of the character
         self.speed = (speed)
+        # Defense of the character: reduces damage from physical type characters
         self.defen = (defen)
+        # Resistance of the character: reduces damage from magical type characters
         self.res = (res)
+        # Attack: controls how much damage a character deals
         self.atk = (atk)
+        # Character type: controls what kind of damage
         self.type = (type)
         #outdated
         '''self.image = pygame.image.load(imageref)'''
