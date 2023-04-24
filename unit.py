@@ -78,7 +78,8 @@ class Player(pygame.sprite.Sprite):
 
     def get_GOB(self):
         return self.GOB
-
+    #out dated
+    '''
     def take_damage (self, damage, magdamage):
         defen = self.get_defen()
         res = self.get_res()
@@ -93,7 +94,8 @@ class Player(pygame.sprite.Sprite):
             self.set_health(self, healthChangeMag)
 
         return 0
-    ''' Here's my interpretation of the take_damage function. Please try testing this
+    '''
+     #Here's my interpretation of the take_damage function. Please try testing this
     
     #This is a function to calcuate how much damage is taken when a unit is attacked 
     def calculate_damage(self, enemy_atk, enemy_type):
@@ -113,7 +115,7 @@ class Player(pygame.sprite.Sprite):
         if total_damage > 0:
             self.health = self.health - total_damage
 
-    '''
+
     def move(self):
 
         dis = self.get_speed()

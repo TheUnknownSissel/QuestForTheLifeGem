@@ -83,8 +83,8 @@ unitPosList = [unitPos1, unitPos2, unitPos3]
 
 #Initialize Units
 mage = Player("Mage", 70, 3, 1, 3, -5, "Magical", "MageTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
-mage.rect.x = MAPWIDTH-1
-mage.rect.y = MAPHEIGHT-1
+mage.rect.x = MAPWIDTH-32
+mage.rect.y = MAPHEIGHT-32
 player_list = pygame.sprite.Group()
 player_list.add(mage)
 warrior = Player("Warrior", 100, 8, 5, 2, 10, "Physical", "FighterTest.png", 0, MAPWIDTH-2, MAPHEIGHT-1)
@@ -99,6 +99,11 @@ tank.rect.y = MAPHEIGHT-1
 player_list = pygame.sprite.Group()
 player_list.add(tank)'''
 
+baddie = Player("badguy", 200, 1, 12, 7, 0, "Physical", "WarriorTest.png", 0,  MAPWIDTH-3, MAPHEIGHT-1)
+baddie.rect.x = MAPWIDTH * TILESIZE - 325
+baddie.rect.y = MAPHEIGHT * TILESIZE - 325
+baddie_list =pygame.sprite.Group()
+baddie_list.add(baddie)
 #Create list of these units
 units = [warrior, mage, tank]
 
@@ -123,6 +128,7 @@ running = True
 #pygame.draw.rect(screen, WHITE, )
 #pygame.draw.rect(screen, MAGENTA, (400, 100, 100, 150))
 
+tracker = 0
 
 # Starting the game loop
 while running:
@@ -142,6 +148,8 @@ while running:
             screen.blit(textures[Grass5], (column * TILESIZE, row * TILESIZE))
     #set Units
     player_list.draw(screen)
+    baddie_list.draw(screen)
+
     #Game iterarion loop
     # Pull Unit from unit order list, reset order if need
     # Check if unit is Player controlable if movement and attack by player: if GOB (good or bad) is 0 it is a player controlled unit
@@ -162,10 +170,11 @@ while running:
 
     #move here
     #for x in range(1,mage.set_speed()):
+
     mage.move()
     pygame.display.flip()
     mage.update()
-        # end movement and attack
+    # end movement and attack
 
     # Update status of units, check for deaths and remove units
 
