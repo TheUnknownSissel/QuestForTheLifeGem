@@ -9,7 +9,7 @@ import mob
 import string
 import map
 from map import *
-
+from gameScreens import Logo
 #Initialize the pygame
 pygame.init()
 #initialize music
@@ -114,15 +114,26 @@ player_list = pygame.sprite.Group()
 player_list.add(tank)'''
 
 baddie = Player("badguy", 100000, 1, 12, 7, 40, "Physical", "WarriorTest.png", "thief_portrait.jpeg", 0,  MAPWIDTH-3, MAPHEIGHT-1)
-baddie.rect.x = MAPWIDTH * TILESIZE - 325
-baddie.rect.y = MAPHEIGHT * TILESIZE - 325
+baddie.rect.x = MAPWIDTH * TILESIZE - 325 -16
+baddie.rect.y = MAPHEIGHT * TILESIZE - 325 -16
 baddie_list =pygame.sprite.Group()
 baddie_list.add(baddie)
 #Create list of these units
 units = [warrior, mage, tank]
+baddies = [baddie]
 
+#setting up the game over and You win "screens"/ logo
+gameover = Logo('Gameover.png')
+gameover.rect.x = MAPWIDTH * TILESIZE -325 -52
+gameover.rect.y = MAPHEIGHT * TILESIZE - 325 - 48
+gameover_list =pygame.sprite.Group()
+gameover_list.add(gameover)
 
-
+win = Logo('Gameover.png')
+win.rect.x = MAPWIDTH * TILESIZE -325
+win.rect.y = MAPHEIGHT * TILESIZE - 325
+win_list =pygame.sprite.Group()
+win_list.add(gameover)
 #Initialize mobs
 #list here for set turn order
 
@@ -155,7 +166,16 @@ def touch():
     if pygame.sprite.collide_rect(mage, baddie):
         # needs to change for the future
         mage.rect.x += 1 + mage.rect.x
-
+def winorlose():
+    #for unit in units
+    # unit.get_current_health
+    if mage.get_current_health() <= 0:
+        gameover_list.draw(screen)
+        print("gameover")
+    #for baddie in baddies
+    if baddie.get_current_health() <= 0:
+        gameover_list.draw(screen)
+        print("win")
 # Starting the game loop
 while running:
     clock.tick(FPS)
@@ -210,7 +230,8 @@ while running:
     # Check if there are any enemies left or if there are any friendly units left
 
     # Check game over or win is true then move to a win or game over screen
-
+    #call the game over funtion once in that state machine
+    winorlose()
     # go back to beginning of loop
     # checks for death
     pygame.display.update()

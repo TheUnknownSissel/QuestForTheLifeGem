@@ -90,11 +90,11 @@ class Player(pygame.sprite.Sprite):
 
     def get_GOB(self):
         return self.GOB
-    #out dated
     def get_maxhealth(self):
         return self.max_health
     def set_maxhealth(self):
         return self.max_health
+    #the way damage was calculated was updated and changed as the project went along
     '''
     def take_damage (self, damage, magdamage):
         defen = self.get_defen()
