@@ -36,6 +36,7 @@ screen = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE + 150))
 # initialize fonts for displaying unit information
 label_font = pygame.font.SysFont('gabriola', 40)
 stats_font = pygame.font.SysFont('gabriola', 30)
+phase_font = pygame.font.SysFont('gabriola', 60)
 
 def display_unit_data(character):
     # Sets up display for given character of type Player stats
@@ -122,6 +123,8 @@ baddie_list.add(baddie)
 units = [warrior, mage, tank]
 baddies = [baddie]
 
+
+
 #setting up the game over and You win "screens"/ logo
 gameover = Logo('Gameover.png')
 gameover.rect.x = MAPWIDTH * TILESIZE -325 -52
@@ -153,7 +156,143 @@ running = True
 #pygame.draw.rect(screen, WHITE, )
 #pygame.draw.rect(screen, MAGENTA, (400, 100, 100, 150))
 
-tracker = 0
+# For keeping track of what state the game is in
+state_tracker = 0
+
+# signal start of player phase.
+# This state has state_tracker value of 0.
+def start_player_phase_state():
+    # Gain access to global variable state_tracker
+    global state_tracker
+    # Clear display window
+    reset_menu()
+    # Create text to signal start of player phase
+    player_phase_text = phase_font.render("Player Phase!", True, WHITE)
+    player_phase_rect = player_phase_text.get_rect()
+    player_phase_rect.center = (325, MAPHEIGHT*TILESIZE + 60)
+    screen.blit(player_phase_text, player_phase_rect)
+    # Create message to tell player how to start gameplay
+    phase_change_text = stats_font.render("(Press y to continue)", True, WHITE)
+    phase_change_rect = phase_change_text.get_rect()
+    phase_change_rect.center = (325, MAPHEIGHT*TILESIZE + 110)
+    screen.blit(phase_change_text, phase_change_rect)
+
+    # when y key is pressed, update state_tracker for next phase
+    key_state = pygame.key.get_pressed()
+    if key_state[pygame.K_y]:
+        # Update state_tracker to move on to move state
+        state_tracker = 1
+
+# Allow the player to move the character when it is the character's turn.
+# This state has state_tracker value of 1.
+def move_state(character):
+    # Gain access to global variable state_tracker
+    global state_tracker
+    # Clear display window
+    reset_menu()
+    # Display stats of current character
+    display_unit_data(character)
+    # Allow player to move character
+    character.move()
+    # Check bounding + if character still has health
+    character.update()
+
+    # For checking for collisions
+    collisions = pygame.sprite.groupcollide(baddie_list, player_list, False, False)
+    # If collision with an enemy occurred, move on to check_enemy_state
+    for collision in collisions:
+        state_tracker = 2
+
+# When an enemy is collided into, the player can check its stats. They then decide to attack or return to move_state.
+# This state has state_tracker value of 2.
+def check_enemy_state(enemy):
+    # Gain access to global variable state_tracker
+    global state_tracker
+    # Clear display window
+    reset_menu()
+    # Display data of enemy that was collided into
+    display_unit_data(enemy)
+
+    # Display player options
+    options_text = stats_font.render('Attack: y Go back: n', True, RED)
+    screen.blit(options_text, (450, MAPHEIGHT * TILESIZE + 5))
+
+    # when y key is pressed, go to battle_forcast_state
+    key_state = pygame.key.get_pressed()
+    if key_state[pygame.K_y]:
+        state_tracker = 3
+    # when n key is pressed, return to move_state
+    if key_state[pygame.K_n]:
+        state_tracker = 1
+
+
+# Show the results of a battle between two characters.
+# This state has state_tracker value of 3.
+'''
+Incomplete
+'''
+def battle_forcast_state(character, enemy):
+    # Gain access to global variable state_tracker
+    global state_tracker
+    # Clear display window
+    reset_menu()
+    # when y key is pressed, go to attack_state
+    key_state = pygame.key.get_pressed()
+    if key_state[pygame.K_y]:
+
+        state_tracker = 4
+    # when n key is pressed, return to move_state
+    if key_state[pygame.K_n]:
+
+        state_tracker = 1
+
+# Have both player and enemy units attack each other and update health to reflect that.
+# This state has state_tracker value of 4
+def attack_state(character, enemy):
+    # Gain access to global variable state_tracker
+    global state_tracker
+    # Clear display window
+    reset_menu()
+    # Enemy takes damage
+    enemy.take_damage(character.atk, character.type)
+    # Check if enemy is dead
+    enemy.update()
+    # Character takes damage
+    character.take_damage(enemy.atk, enemy.type)
+    # Check if character is dead
+    character.update()
+    # Check if winning or losing conditions were met
+    '''
+    TO DO: change this to reflect victory and defeat states
+    '''
+    winorlose()
+    # If win/lose conditions are not met, move on to start_enemy_phase_state
+    state_tracker = 5
+
+# signal start of enemy phase.
+# This state has state_tracker value of 5.
+def start_enemy_phase_state():
+    # Gain access to global variable state_tracker
+    global state_tracker
+    # Clear display window
+    reset_menu()
+    # Create text to signal start of Enemy phase
+    player_phase_text = phase_font.render("Enemy Phase!", True, WHITE)
+    player_phase_rect = player_phase_text.get_rect()
+    player_phase_rect.center = (325, MAPHEIGHT*TILESIZE + 60)
+    screen.blit(player_phase_text, player_phase_rect)
+    # Create message to tell player how to start gameplay
+    phase_change_text = stats_font.render("(Press y to continue)", True, WHITE)
+    phase_change_rect = phase_change_text.get_rect()
+    phase_change_rect.center = (325, MAPHEIGHT*TILESIZE + 110)
+    screen.blit(phase_change_text, phase_change_rect)
+
+    # when y key is pressed, update state_tracker for next phase
+    key_state = pygame.key.get_pressed()
+    if key_state[pygame.K_y]:
+        # Update state_tracker to move on to enemy_attack_state
+        state_tracker = 6
+
 def touch():
     # this was found from pygame.org and the professor's code
     collisions = pygame.sprite.groupcollide(baddie_list, player_list, False, False)
@@ -210,17 +349,24 @@ while running:
             #AI movement/ attack here
     '''
     # Display stats of current character
-    display_unit_data(mage)
+    #display_unit_data(mage)
 
 
 
     #move here
     #for x in range(1,mage.set_speed()):
 
-    mage.move()
-    pygame.display.flip()
-    mage.update()
-    touch()
+    #start_player_phase_state()
+    #mage.move()
+    #pygame.display.flip()
+    #mage.update()
+    #touch()
+    if state_tracker == 0:
+        start_player_phase_state()
+    elif state_tracker == 1:
+        move_state(mage)
+    elif state_tracker == 2:
+        check_enemy_state(baddie)
 
 
     # end movement and attack
