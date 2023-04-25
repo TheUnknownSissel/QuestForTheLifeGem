@@ -129,7 +129,7 @@ gameover.rect.y = MAPHEIGHT * TILESIZE - 325 - 48
 gameover_list =pygame.sprite.Group()
 gameover_list.add(gameover)
 
-win = Logo('Gameover.png')
+win = Logo('Win.png')
 win.rect.x = MAPWIDTH * TILESIZE -325
 win.rect.y = MAPHEIGHT * TILESIZE - 325
 win_list =pygame.sprite.Group()
