@@ -5,7 +5,12 @@ import string
 import sys
 from map import *
 import pygame.event as EVENTS
-
+mage_tileset = pygame.image.load('Textures/mage_spritesheet.png')
+#there are three animations each being at the top with the diemensions 34 I cant find any documentation on how the subsurface is working might not be working
+frame1 = mage_tileset.subsurface([0, 0, 32, 32])
+frame2 = mage_tileset.subsurface([32, 0, 32, 32])
+frame3 = mage_tileset.subsurface([64, 0, 32, 32])
+mageFrames = [frame1, frame2, frame3]
 CYAN = (0, 255, 255)
 class Player(pygame.sprite.Sprite):
     def __init__(self, name, health, speed, defen, res, atk, type, imageref, portrait, GOB, positionx, positiony):
@@ -13,11 +18,12 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         # imageref: the sprite
         self.images = []
-        img = pygame.image.load(os.path.join('Textures', imageref)).convert()
-        img.set_colorkey((0, 0, 0))
-        self.images.append(img)
-        self.image = self.images[0]
-        self.rect = self.image.get_rect()
+        for i in range(1,4):
+            img = pygame.image.load(os.path.join('Textures', imageref)).convert()
+            img.set_colorkey((0, 0, 0))
+            self.images.append(img)
+            self.image = self.images[0]
+            self.rect = self.image.get_rect()
         # Character portrait for stats display. All portraits were drawn by Katherine
         self.portrait = pygame.image.load(os.path.join('Textures', portrait)).convert()
         # Name of the character
