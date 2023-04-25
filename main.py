@@ -94,7 +94,10 @@ unitPos2 = [MAPWIDTH-2, MAPHEIGHT-1]
 unitPos3 = [MAPWIDTH-3, MAPHEIGHT-1]
 
 unitPosList = [unitPos1, unitPos2, unitPos3]
-
+# tile set for the animations/ not set yet for direwctional
+mage_tileset = pygame.image.load('Textures/mage_spritesheet.png')
+#there are three animations each being at the top with the diemensions 34 I cant find any documentation on how the subsurface is working
+frame1 = mage_tileset.subsurface([0, 0, 32, 32])
 #Initialize Units
 mage = Player("Mage", 70, 3, 1, 3, 100, "Magical", "MageTest.png", "mage_portrait.jpeg", 0, MAPWIDTH-2, MAPHEIGHT-1)
 mage.rect.x = MAPWIDTH-32
