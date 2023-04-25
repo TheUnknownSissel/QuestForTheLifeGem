@@ -165,6 +165,9 @@ running = True
 # For keeping track of what state the game is in
 state_tracker = 0
 
+# For keeping track of the last direction a character was moved
+last_direction = pygame.key.get_pressed()
+
 # signal start of player phase.
 # This state has state_tracker value of 0.
 def start_player_phase_state():
@@ -192,8 +195,9 @@ def start_player_phase_state():
 # Allow the player to move the character when it is the character's turn.
 # This state has state_tracker value of 1.
 def move_state(character):
-    # Gain access to global variable state_tracker
+    # Gain access to global variable state_tracker and last_direction
     global state_tracker
+    global last_direction
     # Clear display window
     reset_menu()
     # Display stats of current character
@@ -202,7 +206,8 @@ def move_state(character):
     character.move()
     # Check bounding + if character still has health
     character.update()
-
+    # Record last direction the player character moved
+    last_direction = pygame.key.get_pressed()
     # For checking for collisions
     collisions = pygame.sprite.groupcollide(baddie_list, player_list, False, False)
     # If collision with an enemy occurred, move on to check_enemy_state
@@ -211,9 +216,10 @@ def move_state(character):
 
 # When an enemy is collided into, the player can check its stats. They then decide to attack or return to move_state.
 # This state has state_tracker value of 2.
-def check_enemy_state(enemy):
-    # Gain access to global variable state_tracker
+def check_enemy_state(character, enemy):
+    # Gain access to global variables state_tracker and last_direction
     global state_tracker
+    global last_direction
     # Clear display window
     reset_menu()
     # Display data of enemy that was collided into
@@ -227,8 +233,12 @@ def check_enemy_state(enemy):
     key_state = pygame.key.get_pressed()
     if key_state[pygame.K_y]:
         state_tracker = 3
-    # when n key is pressed, return to move_state
+    # when n key is pressed, return to move_state and move player character back
+    '''
+    TO DO: Change this so player character returns to previous location
+    '''
     if key_state[pygame.K_n]:
+        character.knockback(last_direction)
         state_tracker = 1
 
 
@@ -238,18 +248,38 @@ def check_enemy_state(enemy):
 Incomplete
 '''
 def battle_forcast_state(character, enemy):
-    # Gain access to global variable state_tracker
+    # Gain access to global variables state_tracker and last_direction
     global state_tracker
     # Clear display window
     reset_menu()
+    # Place player character's portrait on the left side
+    screen.blit(character.portrait, (25, MAPHEIGHT * TILESIZE + 10))
+    # Calculate how much damage the player would take if attack goes through
+    character_damage = character.calculate_damage(enemy.atk, enemy.type)
+    # For storing the character's remaining health if damage is dealt
+    character_remaining_health = character.current_health
+    # If any damage will be dealt from the attack, update character_remaining_health to reflect that
+    if character_damage > 0:
+        # Update current health to account for damage
+        character_remaining_health = character_remaining_health - character_damage
+
+    # enemy
+    # Calculate how much damage the enemy would take if attack goes through
+    enemy_damage = enemy.calculate_damage(character.atk, character.type)
+    # For storing the enemy's remaining health if damage is dealt
+    enemy_remaining_health = enemy.current_health
+    # If any damage will be dealt from the attack, update enemy_remaining_health to reflect that
+    if character_damage > 0:
+        # Update current health to account for damage
+        enemy_remaining_health = enemy_remaining_health - enemy_damage
+
     # when y key is pressed, go to attack_state
     key_state = pygame.key.get_pressed()
     if key_state[pygame.K_y]:
-
         state_tracker = 4
     # when n key is pressed, return to move_state
     if key_state[pygame.K_n]:
-
+        character.knockback(last_direction)
         state_tracker = 1
 
 # Have both player and enemy units attack each other and update health to reflect that.
@@ -372,7 +402,7 @@ while running:
     elif state_tracker == 1:
         move_state(mage)
     elif state_tracker == 2:
-        check_enemy_state(baddie)
+        check_enemy_state(mage, baddie)
 
 
     # end movement and attack

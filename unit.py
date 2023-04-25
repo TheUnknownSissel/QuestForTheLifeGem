@@ -170,6 +170,31 @@ class Player(pygame.sprite.Sprite):
         if key_state[pygame.K_DOWN]:
             self.rect.y = y + 4
 
+    # moves a character the opposite direction from the direction last pressed
+    def knockback(self, last_key):
+
+        dis = self.get_speed()
+        x = self.rect.x
+        y = self.rect.y
+        c = 0
+
+        key_state = last_key
+        if key_state[pygame.K_LEFT]:
+            self.rect.x = x + 4
+            dis = dis + 1
+
+        if key_state[pygame.K_RIGHT]:
+            self.rect.x = x - 4
+            dis = dis + 1
+
+        if key_state[pygame.K_UP]:
+            self.rect.y = y + 4
+            dis = dis + 1
+
+        if key_state[pygame.K_DOWN]:
+            self.rect.y = y - 4
+
+
 
     def update(self):
         if self.get_current_health() <= 0:
