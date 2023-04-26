@@ -32,8 +32,6 @@ class Player(pygame.sprite.Sprite):
         self.current_health = (health)
         # Maximum health of the character
         self.max_health = (health)
-        # Previous health of the character: for updating screen when damage is taken
-        self.previous_health = (health)
         # Speed of the character
         self.speed = (speed)
         # Defense of the character: reduces damage from physical type characters
@@ -141,10 +139,11 @@ class Player(pygame.sprite.Sprite):
         total_damage = self.calculate_damage(enemy_atk, enemy_type)
         # Prevent unit from taking negative damage
         if total_damage > 0:
-            # Update previous_health to value of current_health
-            self.previous_health = self.current_health
             # Update current health to account for damage
             self.current_health = self.current_health - total_damage
+            # Prevent unit from having negative health
+            if self.current_health < 0:
+                self.current_health = 0
 
 
     def move(self):

@@ -49,15 +49,6 @@ def display_unit_data(character):
     screen.blit(name_text, name_text_rect)
 
     # Health: will be updated if a character takes damage. Displays both current and max health
-    # Remove previous health by drawing over in black
-    '''
-    TO DO: Consider moving to collision function         
-    '''
-    health_text = stats_font.render('HP: ' + str(character.previous_health) + '/' + str(character.max_health), True, BLACK)
-    health_text_rect = name_text.get_rect()
-    health_text_rect.center = (325, MAPHEIGHT * TILESIZE + 60)
-    screen.blit(health_text, health_text_rect)
-    # Place value of current health on screen
     health_text = stats_font.render('HP: ' + str(character.current_health) + '/' + str(character.max_health), True, WHITE)
     health_text_rect = name_text.get_rect()
     health_text_rect.center = (325, MAPHEIGHT * TILESIZE + 60)
@@ -80,7 +71,7 @@ def display_unit_data(character):
     screen.blit(res_text, (350, MAPHEIGHT * TILESIZE + 100))
 
     # Portrait
-    screen.blit(character.portrait, (25, MAPHEIGHT * TILESIZE + 10))
+    screen.blit(character.portrait, (15, MAPHEIGHT * TILESIZE + 10))
 
 
 # Blacks out the stats menu for updating displayed information
@@ -120,7 +111,7 @@ tank.rect.y = MAPHEIGHT-1
 player_list = pygame.sprite.Group()
 player_list.add(tank)'''
 
-baddie = Player("badguy", 100000, 1, 12, 7, 40, "Physical", "WarriorTest.png", "thief_portrait.jpeg", 0,  MAPWIDTH-3, MAPHEIGHT-1)
+baddie = Player("badguy", 50, 1, 12, 7, 40, "Physical", "WarriorTest.png", "thief_portrait.jpeg", 0,  MAPWIDTH-3, MAPHEIGHT-1)
 baddie.rect.x = MAPWIDTH * TILESIZE - 325 -16
 baddie.rect.y = MAPHEIGHT * TILESIZE - 325 -16
 baddie_list =pygame.sprite.Group()
@@ -142,7 +133,7 @@ win = Logo('Win.png')
 win.rect.x = MAPWIDTH * TILESIZE -325
 win.rect.y = MAPHEIGHT * TILESIZE - 325
 win_list =pygame.sprite.Group()
-win_list.add(gameover)
+win_list.add(win)
 #Initialize mobs
 #list here for set turn order
 
@@ -226,18 +217,18 @@ def check_enemy_state(character, enemy):
     display_unit_data(enemy)
 
     # Display player options
-    options_text = stats_font.render('Attack: y Go back: n', True, RED)
+    options_text = stats_font.render('Attack: a Go back: b', True, RED)
     screen.blit(options_text, (450, MAPHEIGHT * TILESIZE + 5))
 
-    # when y key is pressed, go to battle_forcast_state
+    # when a key is pressed, go to battle_forcast_state
     key_state = pygame.key.get_pressed()
-    if key_state[pygame.K_y]:
+    if key_state[pygame.K_a]:
         state_tracker = 3
     # when n key is pressed, return to move_state and move player character back
     '''
     TO DO: Change this so player character returns to previous location
     '''
-    if key_state[pygame.K_n]:
+    if key_state[pygame.K_b]:
         character.knockback(last_direction)
         state_tracker = 1
 
@@ -252,8 +243,10 @@ def battle_forcast_state(character, enemy):
     global state_tracker
     # Clear display window
     reset_menu()
-    # Place player character's portrait on the left side
-    screen.blit(character.portrait, (25, MAPHEIGHT * TILESIZE + 10))
+    # This label is used for both characters involved in combat
+    remaining_health_label = stats_font.render('Remaining Health: ', True, WHITE)
+
+    # Player Unit
     # Calculate how much damage the player would take if attack goes through
     character_damage = character.calculate_damage(enemy.atk, enemy.type)
     # For storing the character's remaining health if damage is dealt
@@ -262,16 +255,50 @@ def battle_forcast_state(character, enemy):
     if character_damage > 0:
         # Update current health to account for damage
         character_remaining_health = character_remaining_health - character_damage
+        # Prevent character from having negative health
+        if character_remaining_health < 0:
+            character_remaining_health = 0
+    # Place player character's portrait on the left side
+    screen.blit(character.portrait, (15, MAPHEIGHT * TILESIZE + 10))
+    # Prepare text to display character's remaining health
+    character_health_text = stats_font.render(str(character_remaining_health) + "/" + str(character.max_health), True, WHITE)
+    # Display character's remaining health to screen
+    screen.blit(character_health_text, (155, MAPHEIGHT * TILESIZE + 55))
 
-    # enemy
+    # Enemy Unit
     # Calculate how much damage the enemy would take if attack goes through
     enemy_damage = enemy.calculate_damage(character.atk, character.type)
     # For storing the enemy's remaining health if damage is dealt
     enemy_remaining_health = enemy.current_health
     # If any damage will be dealt from the attack, update enemy_remaining_health to reflect that
-    if character_damage > 0:
+    if enemy_damage > 0:
         # Update current health to account for damage
         enemy_remaining_health = enemy_remaining_health - enemy_damage
+        # Prevent enemy from having negative health
+        if enemy_remaining_health < 0:
+            enemy_remaining_health = 0
+    # Place enemy character's portrait on the right side
+    screen.blit(enemy.portrait, (500, MAPHEIGHT * TILESIZE + 10))
+    # Prepare text to display enemy's remaining health
+    enemy_health_text = stats_font.render(str(enemy_remaining_health) + "/" + str(enemy.max_health), True, WHITE)
+    # Display enemy's remaining health to screen
+    screen.blit(enemy_health_text, (450, MAPHEIGHT * TILESIZE + 55))
+
+    # Battle Forcast label
+    battle_forcast_text = label_font.render("Battle Forcast", True, WHITE)
+    screen.blit(battle_forcast_text, (240, MAPHEIGHT*TILESIZE + 5))
+
+    # Attack question label
+    attack_question_text = label_font.render("Attack?", True, WHITE)
+    screen.blit(attack_question_text, (275, MAPHEIGHT * TILESIZE + 55))
+
+    # Yes label
+    yes_label = stats_font.render("Yes: y", True, WHITE)
+    screen.blit(yes_label, (210, MAPHEIGHT * TILESIZE + 100))
+
+    # No label
+    no_label = stats_font.render("No: n", True, WHITE)
+    screen.blit(no_label, (390, MAPHEIGHT * TILESIZE + 100))
 
     # when y key is pressed, go to attack_state
     key_state = pygame.key.get_pressed()
@@ -345,12 +372,14 @@ def winorlose():
     #for unit in units
     # unit.get_current_health
     if mage.get_current_health() <= 0:
+        reset_menu()
         gameover_list.draw(screen)
-        print("gameover")
+        #print("gameover")
     #for baddie in baddies
     if baddie.get_current_health() <= 0:
-        gameover_list.draw(screen)
-        print("win")
+        reset_menu()
+        win_list.draw(screen)
+        #print("win")
 # Starting the game loop
 while running:
     clock.tick(FPS)
@@ -397,12 +426,20 @@ while running:
     #pygame.display.flip()
     #mage.update()
     #touch()
+
+    # State machine
     if state_tracker == 0:
         start_player_phase_state()
     elif state_tracker == 1:
         move_state(mage)
     elif state_tracker == 2:
         check_enemy_state(mage, baddie)
+    elif state_tracker == 3:
+        battle_forcast_state(mage, baddie)
+    elif state_tracker == 4:
+        attack_state(mage, baddie)
+    elif state_tracker == 5:
+        start_enemy_phase_state()
 
 
     # end movement and attack
