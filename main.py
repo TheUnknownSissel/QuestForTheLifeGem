@@ -94,7 +94,7 @@ frame2 = mage_tileset.subsurface([32, 0, 32, 32])
 frame3 = mage_tileset.subsurface([64, 0, 32, 32])
 mageFrames = [frame1, frame2, frame3]
 #Initialize Units
-mage = Player("Mage", 70, 3, 1, 3, 100, "Magical", "mageframe0.png", "mage_portrait.jpeg", 0, MAPWIDTH -1, MAPHEIGHT-1)
+mage = Player("Mage", 25, 3, 1, 3, 7, "Magical", "mageframe0.png", "mage_portrait.jpeg", 0, MAPWIDTH -1, MAPHEIGHT-1)
 mage.rect.x = MAPWIDTH * TILESIZE- 325 - 16
 mage.rect.y = MAPHEIGHT * TILESIZE - 600 - 16
 player_list = pygame.sprite.Group()
@@ -111,7 +111,7 @@ tank.rect.y = MAPHEIGHT-1
 player_list = pygame.sprite.Group()
 player_list.add(tank)'''
 
-baddie = Player("Thief", 50, 1, 12, 7, 40, "Physical", "thiefframe0.png", "thief_portrait.jpeg", 0,  MAPWIDTH-3, MAPHEIGHT-1)
+baddie = Player("Thief", 25, 1, 5, 2, 5, "Physical", "thiefframe0.png", "thief_portrait.jpeg", 0,  MAPWIDTH-3, MAPHEIGHT-1)
 baddie.rect.x = MAPWIDTH * TILESIZE - 325 -16
 baddie.rect.y = MAPHEIGHT * TILESIZE - 325 -16
 baddie_list =pygame.sprite.Group()
@@ -172,14 +172,14 @@ def start_player_phase_state():
     player_phase_rect.center = (325, MAPHEIGHT*TILESIZE + 60)
     screen.blit(player_phase_text, player_phase_rect)
     # Create message to tell player how to start gameplay
-    phase_change_text = stats_font.render("(Press y to continue)", True, WHITE)
+    phase_change_text = stats_font.render("(Press c to continue)", True, WHITE)
     phase_change_rect = phase_change_text.get_rect()
     phase_change_rect.center = (325, MAPHEIGHT*TILESIZE + 110)
     screen.blit(phase_change_text, phase_change_rect)
 
     # when y key is pressed, update state_tracker for next phase
     key_state = pygame.key.get_pressed()
-    if key_state[pygame.K_y]:
+    if key_state[pygame.K_c]:
         # Update state_tracker to move on to move state
         state_tracker = 1
 
@@ -235,12 +235,10 @@ def check_enemy_state(character, enemy):
 
 # Show the results of a battle between two characters.
 # This state has state_tracker value of 3.
-'''
-Incomplete
-'''
 def battle_forcast_state(character, enemy):
     # Gain access to global variables state_tracker and last_direction
     global state_tracker
+    global last_direction
     # Clear display window
     reset_menu()
     # This label is used for both characters involved in combat
@@ -303,6 +301,7 @@ def battle_forcast_state(character, enemy):
     # when y key is pressed, go to attack_state
     key_state = pygame.key.get_pressed()
     if key_state[pygame.K_y]:
+        character.knockback(last_direction)
         state_tracker = 4
     # when n key is pressed, return to move_state
     if key_state[pygame.K_n]:
@@ -328,9 +327,9 @@ def attack_state(character, enemy):
     '''
     TO DO: change this to reflect victory and defeat states
     '''
-    winorlose()
     # If win/lose conditions are not met, move on to start_enemy_phase_state
     state_tracker = 5
+    winorlose()
 
 # signal start of enemy phase.
 # This state has state_tracker value of 5.
@@ -345,16 +344,118 @@ def start_enemy_phase_state():
     player_phase_rect.center = (325, MAPHEIGHT*TILESIZE + 60)
     screen.blit(player_phase_text, player_phase_rect)
     # Create message to tell player how to start gameplay
-    phase_change_text = stats_font.render("(Press y to continue)", True, WHITE)
+    phase_change_text = stats_font.render("(Press c to continue)", True, WHITE)
     phase_change_rect = phase_change_text.get_rect()
     phase_change_rect.center = (325, MAPHEIGHT*TILESIZE + 110)
     screen.blit(phase_change_text, phase_change_rect)
 
     # when y key is pressed, update state_tracker for next phase
     key_state = pygame.key.get_pressed()
-    if key_state[pygame.K_y]:
+    if key_state[pygame.K_c]:
         # Update state_tracker to move on to enemy_attack_state
         state_tracker = 6
+
+# Enemy attacks player unit that attacked it last
+# This state has state_tracker value of 6.
+'''
+TO DO: make the enemy AI more complicated
+'''
+def enemy_attack_phase(enemy, character):
+    # Gain access to global variable state_tracker
+    global state_tracker
+    # Clear display window
+    reset_menu()
+
+    # Display what the enemy did
+    # Player Unit
+    # Calculate how much damage the player would take if attack goes through
+    character_damage = character.calculate_damage(enemy.atk, enemy.type)
+    # For storing the character's remaining health if damage is dealt
+    character_remaining_health = character.current_health
+    # If any damage will be dealt from the attack, update character_remaining_health to reflect that
+    if character_damage > 0:
+        # Update current health to account for damage
+        character_remaining_health = character_remaining_health - character_damage
+        # Prevent character from having negative health
+        if character_remaining_health < 0:
+            character_remaining_health = 0
+    # Place player character's portrait on the left side
+    screen.blit(character.portrait, (15, MAPHEIGHT * TILESIZE + 10))
+    # Prepare text to display character's remaining health
+    character_health_text = stats_font.render(str(character_remaining_health) + "/" + str(character.max_health), True,
+                                              WHITE)
+    # Display character's remaining health to screen
+    screen.blit(character_health_text, (155, MAPHEIGHT * TILESIZE + 55))
+
+    # Enemy Unit
+    # Calculate how much damage the enemy would take if attack goes through
+    enemy_damage = enemy.calculate_damage(character.atk, character.type)
+    # For storing the enemy's remaining health if damage is dealt
+    enemy_remaining_health = enemy.current_health
+    # If any damage will be dealt from the attack, update enemy_remaining_health to reflect that
+    if enemy_damage > 0:
+        # Update current health to account for damage
+        enemy_remaining_health = enemy_remaining_health - enemy_damage
+        # Prevent enemy from having negative health
+        if enemy_remaining_health < 0:
+            enemy_remaining_health = 0
+    # Place enemy character's portrait on the right side
+    screen.blit(enemy.portrait, (500, MAPHEIGHT * TILESIZE + 10))
+    # Prepare text to display enemy's remaining health
+    enemy_health_text = stats_font.render(str(enemy_remaining_health) + "/" + str(enemy.max_health), True, WHITE)
+    # Display enemy's remaining health to screen
+    screen.blit(enemy_health_text, (450, MAPHEIGHT * TILESIZE + 55))
+
+
+    # Enemy name
+    enemy_name_text = label_font.render(enemy.name, True, WHITE)
+    screen.blit(enemy_name_text, (275, MAPHEIGHT*TILESIZE + 5))
+
+    # Attacked label
+    attacked_text = label_font.render("attacked", True, WHITE)
+    screen.blit(attacked_text, (275, MAPHEIGHT * TILESIZE + 40))
+
+    # character name
+    character_name_text = label_font.render(character.name + "!", True, WHITE)
+    screen.blit(character_name_text, (275, MAPHEIGHT*TILESIZE + 70))
+
+    # character name
+    character_name_text = label_font.render(character.name + "!", True, WHITE)
+    screen.blit(character_name_text, (275, MAPHEIGHT*TILESIZE + 70))
+
+    phase_change_text = stats_font.render("(Press e to continue)", True, WHITE)
+    phase_change_rect = phase_change_text.get_rect()
+    phase_change_rect.center = (325, MAPHEIGHT * TILESIZE + 130)
+    screen.blit(phase_change_text, phase_change_rect)
+
+    # when e key is pressed, update state_tracker for next phase
+    key_state = pygame.key.get_pressed()
+    if key_state[pygame.K_e]:
+        # Both characters are updated with damage. Done here to prevent an infinite loop of constant damage
+        # Character takes damage
+        character.take_damage(enemy.atk, enemy.type)
+        # Enemy takes damage
+        enemy.take_damage(character.atk, character.type)
+        # Check if character is dead
+        character.update()
+        # Check if enemy is dead
+        enemy.update()
+        state_tracker = 0
+        # If win/lose conditions are not met, move on to start_player_phase
+        winorlose()
+
+# Displayed when the player loses.
+# This state has state_tracker value of 7.
+def lose_state():
+    reset_menu()
+    gameover_list.draw(screen)
+
+# Displayed when the player wins.
+# This state has state_tracker value of 8.
+def win_state():
+    reset_menu()
+    win_list.draw(screen)
+
 
 def touch():
     # this was found from pygame.org and the professor's code
@@ -369,16 +470,20 @@ def touch():
         # needs to change for the future
         mage.rect.x += 1 + mage.rect.x
 def winorlose():
+    # Gain access to global variable state_tracker
+    global state_tracker
     #for unit in units
     # unit.get_current_health
     if mage.get_current_health() <= 0:
-        reset_menu()
-        gameover_list.draw(screen)
+        state_tracker = 7
+        #reset_menu()
+        #gameover_list.draw(screen)
         #print("gameover")
     #for baddie in baddies
     if baddie.get_current_health() <= 0:
-        reset_menu()
-        win_list.draw(screen)
+        state_tracker = 8
+        #reset_menu()
+        #win_list.draw(screen)
         #print("win")
 # Starting the game loop
 while running:
@@ -440,6 +545,12 @@ while running:
         attack_state(mage, baddie)
     elif state_tracker == 5:
         start_enemy_phase_state()
+    elif state_tracker == 6:
+        enemy_attack_phase(baddie, mage)
+    elif state_tracker == 7:
+        lose_state()
+    elif state_tracker == 8:
+        win_state()
 
 
     # end movement and attack
@@ -450,7 +561,7 @@ while running:
 
     # Check game over or win is true then move to a win or game over screen
     #call the game over funtion once in that state machine
-    winorlose()
+
     # go back to beginning of loop
     # checks for death
     pygame.display.update()
