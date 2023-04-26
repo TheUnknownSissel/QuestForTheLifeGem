@@ -94,7 +94,7 @@ frame2 = mage_tileset.subsurface([32, 0, 32, 32])
 frame3 = mage_tileset.subsurface([64, 0, 32, 32])
 mageFrames = [frame1, frame2, frame3]
 #Initialize Units
-mage = Player("Mage", 70, 3, 1, 3, 100, "Magical", "MageTest.png", "mage_portrait.jpeg", 0, MAPWIDTH-2, MAPHEIGHT-1)
+mage = Player("Mage", 70, 3, 1, 3, 100, "Magical", "mageframe0.png", "mage_portrait.jpeg", 0, MAPWIDTH-2, MAPHEIGHT-1)
 mage.rect.x = MAPWIDTH-32
 mage.rect.y = MAPHEIGHT-32
 player_list = pygame.sprite.Group()
@@ -111,7 +111,7 @@ tank.rect.y = MAPHEIGHT-1
 player_list = pygame.sprite.Group()
 player_list.add(tank)'''
 
-baddie = Player("badguy", 50, 1, 12, 7, 40, "Physical", "WarriorTest.png", "thief_portrait.jpeg", 0,  MAPWIDTH-3, MAPHEIGHT-1)
+baddie = Player("Thief", 50, 1, 12, 7, 40, "Physical", "thiefframe0.png", "thief_portrait.jpeg", 0,  MAPWIDTH-3, MAPHEIGHT-1)
 baddie.rect.x = MAPWIDTH * TILESIZE - 325 -16
 baddie.rect.y = MAPHEIGHT * TILESIZE - 325 -16
 baddie_list =pygame.sprite.Group()
@@ -130,8 +130,8 @@ gameover_list =pygame.sprite.Group()
 gameover_list.add(gameover)
 
 win = Logo('Win.png')
-win.rect.x = MAPWIDTH * TILESIZE -325
-win.rect.y = MAPHEIGHT * TILESIZE - 325
+win.rect.x = MAPWIDTH * TILESIZE - 325 - 52
+win.rect.y = MAPHEIGHT * TILESIZE - 325 - 48
 win_list =pygame.sprite.Group()
 win_list.add(win)
 #Initialize mobs

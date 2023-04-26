@@ -12,6 +12,7 @@ frame2 = mage_tileset.subsurface([32, 0, 32, 32])
 frame3 = mage_tileset.subsurface([64, 0, 32, 32])
 mageFrames = [frame1, frame2, frame3]
 CYAN = (0, 255, 255)
+BLACK = (0, 0, 0)
 class Player(pygame.sprite.Sprite):
     def __init__(self, name, health, speed, defen, res, atk, type, imageref, portrait, GOB, positionx, positiony):
 
@@ -45,9 +46,9 @@ class Player(pygame.sprite.Sprite):
         #outdated
         '''self.image = pygame.image.load(imageref)'''
         self.GOB = (GOB)
-
-
-
+        self.frame = 0
+        self.last_update = pygame.time.get_ticks()
+        self.frame_rate = 60
 
     #Getters and setters for all unit stats
     def set_name(self, n):
@@ -98,7 +99,7 @@ class Player(pygame.sprite.Sprite):
         return self.max_health
     def set_maxhealth(self):
         return self.max_health
-    #the way damage was calculated was updated and changed as the project went along
+    # the way damage was calculated was updated and changed as the project went along
     '''
     def take_damage (self, damage, magdamage):
         defen = self.get_defen()
@@ -115,18 +116,19 @@ class Player(pygame.sprite.Sprite):
 
         return 0
     '''
-     #Here's my interpretation of the take_damage function. Please try testing this
-    
-    #This is a function to calcuate how much damage is taken when a unit is attacked 
+
+    # Here's my interpretation of the take_damage function. Please try testing this
+
+    # This is a function to calcuate how much damage is taken when a unit is attacked
     def calculate_damage(self, enemy_atk, enemy_type):
         # Initialize the variable to store how much damage will be taken
         total_damage = 0
-        # If enemy type is physical, calculate damage by subtracting unit's defen 
+        # If enemy type is physical, calculate damage by subtracting unit's defen
         # from enemy's atk
         if enemy_type == "Physical":
             total_damage = enemy_atk - self.defen
-            
-        # Else, if enemy type is magical, calculate damage by subtracting unit's res 
+
+        # Else, if enemy type is magical, calculate damage by subtracting unit's res
         # from enemy's atk
         else:
             total_damage = enemy_atk - self.res
@@ -139,12 +141,10 @@ class Player(pygame.sprite.Sprite):
         total_damage = self.calculate_damage(enemy_atk, enemy_type)
         # Prevent unit from taking negative damage
         if total_damage > 0:
+            # Update previous_health to value of current_health
+            self.previous_health = self.current_health
             # Update current health to account for damage
             self.current_health = self.current_health - total_damage
-            # Prevent unit from having negative health
-            if self.current_health < 0:
-                self.current_health = 0
-
 
     def move(self):
 
@@ -155,7 +155,7 @@ class Player(pygame.sprite.Sprite):
 
         key_state = pygame.key.get_pressed()
         if key_state[pygame.K_LEFT]:
-            self.rect.x = x -4
+            self.rect.x = x - 4
             dis = dis + 1
 
         if key_state[pygame.K_RIGHT]:
@@ -165,7 +165,7 @@ class Player(pygame.sprite.Sprite):
         if key_state[pygame.K_UP]:
             self.rect.y = y - 4
             dis = dis + 1
-            #update to ckeck for bounding
+            # update to ckeck for bounding
         if key_state[pygame.K_DOWN]:
             self.rect.y = y + 4
 
@@ -193,8 +193,6 @@ class Player(pygame.sprite.Sprite):
         if key_state[pygame.K_DOWN]:
             self.rect.y = y - 4
 
-
-
     def update(self):
         if self.get_current_health() <= 0:
             self.kill()
@@ -206,3 +204,23 @@ class Player(pygame.sprite.Sprite):
             self.rect.right = MAXRIGHT
         if self.rect.bottom > MAXBOTTOM:
             self.rect.bottom = MAXBOTTOM
+        now = pygame.time.get_ticks()
+        if now - self.last_update > self.frame_rate:
+            self.last_update = now
+            self.frame += 1
+            if self.frame == 1:
+                image = pygame.image.load(
+                    os.path.join('Textures', self.name + 'frame' + str(self.frame - 1) + '.png')).convert()
+                image.set_colorkey(BLACK)
+                self.image = image
+            if self.frame == 2:
+                image = pygame.image.load(
+                    os.path.join('Textures', self.name + 'frame' + str(self.frame - 1) + '.png')).convert()
+                image.set_colorkey(BLACK)
+                self.image = image
+            if self.frame == 2:
+                image = pygame.image.load(
+                    os.path.join('Textures', self.name + 'frame' + str(self.frame - 1) + '.png')).convert()
+                image.set_colorkey(BLACK)
+                self.image = image
+                self.frame = 0
