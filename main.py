@@ -94,9 +94,9 @@ frame2 = mage_tileset.subsurface([32, 0, 32, 32])
 frame3 = mage_tileset.subsurface([64, 0, 32, 32])
 mageFrames = [frame1, frame2, frame3]
 #Initialize Units
-mage = Player("Mage", 70, 3, 1, 3, 100, "Magical", "mageframe0.png", "mage_portrait.jpeg", 0, MAPWIDTH-2, MAPHEIGHT-1)
-mage.rect.x = MAPWIDTH-32
-mage.rect.y = MAPHEIGHT-32
+mage = Player("Mage", 70, 3, 1, 3, 100, "Magical", "mageframe0.png", "mage_portrait.jpeg", 0, MAPWIDTH -1, MAPHEIGHT-1)
+mage.rect.x = MAPWIDTH * TILESIZE- 325 - 16
+mage.rect.y = MAPHEIGHT * TILESIZE - 600 - 16
 player_list = pygame.sprite.Group()
 player_list.add(mage)
 warrior = Player("Warrior", 100, 8, 5, 2, 10, "Physical", "FighterTest.png", "fighter_portrait.jpeg", 0, MAPWIDTH-2, MAPHEIGHT-1)
