@@ -80,6 +80,7 @@ def reset_menu():
     pygame.draw.rect(screen, BLACK, (0, 640, 640, 150))
 
 #initialize sword slash sound effect
+#taken from https://mixkit.co/free-sound-effects/sword/
 sword_effect = pygame.mixer.Sound(os.path.join('Audio', 'mixkit-fantasy-sword-slide-2798.wav'))
 #Create player positions and list of all player positioining
 unitPos1 = [MAPWIDTH-1, MAPHEIGHT-1]
@@ -487,7 +488,6 @@ def winorlose():
 pygame.mixer.music.load(os.path.join('Audio', 'nonstopix-non-stop-rising-drum-beat-20804.wav'))
 pygame.mixer.music.set_volume(0.7)
 pygame.mixer.music.play(loops =-1)
-# sword slash sound effect
 # Starting the game loop
 while running:
     clock.tick(FPS)
