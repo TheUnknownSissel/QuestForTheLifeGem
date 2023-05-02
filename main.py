@@ -79,7 +79,8 @@ def reset_menu():
     # Creates a black box to cover the old data so new data could be displayed
     pygame.draw.rect(screen, BLACK, (0, 640, 640, 150))
 
-
+#initialize sword slash sound effect
+sword_effect = pygame.mixer.Sound(os.path.join('Audio', 'mixkit-fantasy-sword-slide-2798.wav'))
 #Create player positions and list of all player positioining
 unitPos1 = [MAPWIDTH-1, MAPHEIGHT-1]
 unitPos2 = [MAPWIDTH-2, MAPHEIGHT-1]
@@ -136,10 +137,6 @@ win_list =pygame.sprite.Group()
 win_list.add(win)
 #Initialize mobs
 #list here for set turn order
-
-
-#pygame.mixer.music.load(os.path.join('Audio', 'nonstopix-rising-drum-beat-20804.wav'))
-
 
 
 #Fill background with background color
@@ -463,6 +460,7 @@ def touch():
     for collision in collisions:
         baddie.take_damage(mage.get_atk(), mage.get_type())
         mage.take_damage(baddie.get_atk(), baddie.get_type())
+        sword_effect.play()
         # for testing purposes only
         print(baddie.get_current_health())
         print(mage.get_current_health())
@@ -485,6 +483,11 @@ def winorlose():
         #reset_menu()
         #win_list.draw(screen)
         #print("win")
+# music was made by Nonstopix https://pixabay.com/music/search/rising%20drum%20beat/
+pygame.mixer.music.load(os.path.join('Audio', 'nonstopix-non-stop-rising-drum-beat-20804.wav'))
+pygame.mixer.music.set_volume(0.7)
+pygame.mixer.music.play(loops =-1)
+# sword slash sound effect
 # Starting the game loop
 while running:
     clock.tick(FPS)
