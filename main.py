@@ -108,19 +108,19 @@ mage.rect.y = MAPHEIGHT * TILESIZE - 600 - 16
 mage_list = pygame.sprite.Group()
 mage_list.add(mage)
 mage.set_sprite(mage_list)
-warrior = Player("Warrior", 35, 8, 5, 2, 10, "Physical", "warriorframe0.png", "fighter_portrait.jpeg", 0)
+warrior = Player("Warrior", 35, 5, 5, 2, 10, "Physical", "warriorframe0.png", "fighter_portrait.jpeg", 0)
 warrior.rect.x = MAPWIDTH * TILESIZE- 200 - 16
 warrior.rect.y = MAPHEIGHT * TILESIZE - 600 - 16
 warrior_list = pygame.sprite.Group()
 warrior_list.add(warrior)
 warrior.set_sprite(warrior_list)
-tank = Player("Tank", 50, 1, 12, 7, 8, "Physical", "tankframe0.png", "knight_portrait.jpeg", 0)
+tank = Player("Tank", 50, 1, 8, 7, 8, "Physical", "tankframe0.png", "knight_portrait.jpeg", 0)
 tank.rect.x = MAPWIDTH * TILESIZE- 400 - 16
 tank.rect.y = MAPHEIGHT * TILESIZE - 600 - 16
 tank_list = pygame.sprite.Group()
 tank_list.add(tank)
 tank.set_sprite(tank_list)
-thief0 = Player("Thief", 25, 1, 5, 2, 5, "Physical", "thiefframe0.png", "thief_portrait.jpeg", 0)
+thief0 = Player("Thief", 30, 1, 3, 2, 9, "Physical", "thiefframe0.png", "thief_portrait.jpeg", 0)
 thief0.rect.x = MAPWIDTH * TILESIZE - 325 -16
 thief0.rect.y = MAPHEIGHT * TILESIZE - 325 -16
 thief0_list =pygame.sprite.Group()
@@ -540,7 +540,7 @@ def enemy_attack_phase(enemy):
                 prev_array_position = units.index(character)
                 units.pop(prev_array_position)
                 # Update enemies last_attacked_by to account for defeated unit being removed from the units array
-                for i in baddies:
+                for i in range(len(baddies)):
                     if baddies[i].last_attacked_by > prev_array_position:
                         baddies[i].last_attacked_by -= 1
             character.update()
