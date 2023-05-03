@@ -234,6 +234,7 @@ def move_state(character, spriteList):
                 character.attacked = 0
             if sprite == thief1_list:
                 character.attacked = 1
+
 # When an enemy is collided into, the player can check its stats. They then decide to attack or return to move_state.
 # This state has state_tracker value of 2.
 def check_enemy_state(character, enemy):
@@ -340,25 +341,40 @@ def battle_forcast_state(character, enemy):
 # Have both player and enemy units attack each other and update health to reflect that.
 # This state has state_tracker value of 4
 def attack_state(character, enemy):
-    # Gain access to global variables state_tracker, unmoved_units, remaining_player_units, and remaining_enemy_units
+    # Gain access to global variables state_tracker, unmoved_units, remaining_player_units, remaining_enemy_units, units, and baddies
     global state_tracker
     global unmoved_units
     global remaining_player_units
     global remaining_enemy_units
+    global units
+    global baddies
     # Clear display window
     reset_menu()
-    # Enemy takes damage
-    enemy.take_damage(character.atk, character.type)
-    # Check if enemy is dead: update remaining_enemy_units and remove from map if true
-    if enemy.current_health <= 0:
-        remaining_enemy_units -= 1
-    enemy.update()
+
     # Character takes damage
     character.take_damage(enemy.atk, enemy.type)
-    # Check if character is dead: update remaining_enemy_units and remove from map if true
+    # Check if character is dead: update remaining_player_units and remove from units list if true
     if character.current_health <= 0:
         remaining_player_units -= 1
+        prev_array_position = units.index(character)
+        units.pop(prev_array_position)
+    # Otherwise, reset character's attacked variable
+    else:
+        character.attacked = -1
     character.update()
+
+    # Enemy takes damage
+    enemy.take_damage(character.atk, character.type)
+    # Check if enemy is dead: update remaining_enemy_units and remove from baddies list if true
+    if enemy.current_health <= 0:
+        remaining_enemy_units -= 1
+        prev_array_position = baddies.index(enemy)
+        baddies.pop(prev_array_position)
+    # Otherwise, set character's index as enemy's last_attacked_by for enemy_attack_state if character is still alive
+    elif units.count(character) > 0:
+        enemy.last_attacked_by = units.index(character)
+    enemy.update()
+
     # Update value of unmoved_units to reflect that current player character has finished their turn
     unmoved_units -= 1
     # If win/lose conditions are not met and there are no more player characters to move,
@@ -401,96 +417,124 @@ def start_enemy_phase_state():
 
 # Enemy attacks player unit that attacked it last
 # This state has state_tracker value of 6.
-'''
-TO DO: make the enemy AI more complicated
-'''
-def enemy_attack_phase(enemy, character):
-    # Gain access to global variables state_tracker, unmoved_enemies, remaining_player_units, and remaining_enemy_units
+def enemy_attack_phase(enemy):
+    # Gain access to global variables state_tracker, unmoved_enemies, remaining_player_units, remaining_enemy_units, units, and baddies
     global state_tracker
     global unmoved_enemies
     global remaining_player_units
     global remaining_enemy_units
+    global units
+    global baddies
     # Clear display window
     reset_menu()
 
     # Display what the enemy did
-    # Player Unit
-    # Calculate how much damage the player would take if attack goes through
-    character_damage = character.calculate_damage(enemy.atk, enemy.type)
-    # For storing the character's remaining health if damage is dealt
-    character_remaining_health = character.current_health
-    # If any damage will be dealt from the attack, update character_remaining_health to reflect that
-    if character_damage > 0:
-        # Update current health to account for damage
-        character_remaining_health = character_remaining_health - character_damage
-        # Prevent character from having negative health
-        if character_remaining_health < 0:
-            character_remaining_health = 0
-    # Place player character's portrait on the left side
-    screen.blit(character.portrait, (15, MAPHEIGHT * TILESIZE + 10))
-    # Prepare text to display character's remaining health
-    character_health_text = stats_font.render(str(character_remaining_health) + "/" + str(character.max_health), True,
+    # Attack the player character the enemy was last attacked by if they were attacked
+    if enemy.last_attacked_by > -1:
+        character = units[enemy.last_attacked_by]
+        # Player Unit
+        # Calculate how much damage the player would take if attack goes through
+        character_damage = character.calculate_damage(enemy.atk, enemy.type)
+        # For storing the character's remaining health if damage is dealt
+        character_remaining_health = character.current_health
+        # If any damage will be dealt from the attack, update character_remaining_health to reflect that
+        if character_damage > 0:
+            # Update current health to account for damage
+            character_remaining_health = character_remaining_health - character_damage
+            # Prevent character from having negative health
+            if character_remaining_health < 0:
+                character_remaining_health = 0
+        # Place player character's portrait on the left side
+        screen.blit(character.portrait, (15, MAPHEIGHT * TILESIZE + 10))
+        # Prepare text to display character's remaining health
+        character_health_text = stats_font.render(str(character_remaining_health) + "/" + str(character.max_health), True,
                                               WHITE)
-    # Display character's remaining health to screen
-    screen.blit(character_health_text, (155, MAPHEIGHT * TILESIZE + 55))
+        # Display character's remaining health to screen
+        screen.blit(character_health_text, (155, MAPHEIGHT * TILESIZE + 55))
 
-    # Enemy Unit
-    # Calculate how much damage the enemy would take if attack goes through
-    enemy_damage = enemy.calculate_damage(character.atk, character.type)
-    # For storing the enemy's remaining health if damage is dealt
-    enemy_remaining_health = enemy.current_health
-    # If any damage will be dealt from the attack, update enemy_remaining_health to reflect that
-    if enemy_damage > 0:
-        # Update current health to account for damage
-        enemy_remaining_health = enemy_remaining_health - enemy_damage
-        # Prevent enemy from having negative health
-        if enemy_remaining_health < 0:
-            enemy_remaining_health = 0
-    # Place enemy character's portrait on the right side
-    screen.blit(enemy.portrait, (500, MAPHEIGHT * TILESIZE + 10))
-    # Prepare text to display enemy's remaining health
-    enemy_health_text = stats_font.render(str(enemy_remaining_health) + "/" + str(enemy.max_health), True, WHITE)
-    # Display enemy's remaining health to screen
-    screen.blit(enemy_health_text, (450, MAPHEIGHT * TILESIZE + 55))
+        # Enemy Unit
+        # Calculate how much damage the enemy would take if attack goes through
+        enemy_damage = enemy.calculate_damage(character.atk, character.type)
+        # For storing the enemy's remaining health if damage is dealt
+        enemy_remaining_health = enemy.current_health
+        # If any damage will be dealt from the attack, update enemy_remaining_health to reflect that
+        if enemy_damage > 0:
+            # Update current health to account for damage
+            enemy_remaining_health = enemy_remaining_health - enemy_damage
+            # Prevent enemy from having negative health
+            if enemy_remaining_health < 0:
+                enemy_remaining_health = 0
+        # Place enemy character's portrait on the right side
+        screen.blit(enemy.portrait, (500, MAPHEIGHT * TILESIZE + 10))
+        # Prepare text to display enemy's remaining health
+        enemy_health_text = stats_font.render(str(enemy_remaining_health) + "/" + str(enemy.max_health), True, WHITE)
+        # Display enemy's remaining health to screen
+        screen.blit(enemy_health_text, (450, MAPHEIGHT * TILESIZE + 55))
 
+        # Enemy name
+        enemy_name_text = label_font.render(enemy.name, True, WHITE)
+        screen.blit(enemy_name_text, (275, MAPHEIGHT*TILESIZE + 5))
 
-    # Enemy name
-    enemy_name_text = label_font.render(enemy.name, True, WHITE)
-    screen.blit(enemy_name_text, (275, MAPHEIGHT*TILESIZE + 5))
+        # Attacked label
+        attacked_text = label_font.render("attacked", True, WHITE)
+        screen.blit(attacked_text, (275, MAPHEIGHT * TILESIZE + 40))
 
-    # Attacked label
-    attacked_text = label_font.render("attacked", True, WHITE)
-    screen.blit(attacked_text, (275, MAPHEIGHT * TILESIZE + 40))
+        # character name
+        character_name_text = label_font.render(character.name + "!", True, WHITE)
+        screen.blit(character_name_text, (275, MAPHEIGHT*TILESIZE + 70))
 
-    # character name
-    character_name_text = label_font.render(character.name + "!", True, WHITE)
-    screen.blit(character_name_text, (275, MAPHEIGHT*TILESIZE + 70))
+        # character name
+        character_name_text = label_font.render(character.name + "!", True, WHITE)
+        screen.blit(character_name_text, (275, MAPHEIGHT*TILESIZE + 70))
 
-    # character name
-    character_name_text = label_font.render(character.name + "!", True, WHITE)
-    screen.blit(character_name_text, (275, MAPHEIGHT*TILESIZE + 70))
+        phase_change_text = stats_font.render("(Press e to continue)", True, WHITE)
+        phase_change_rect = phase_change_text.get_rect()
+        phase_change_rect.center = (325, MAPHEIGHT * TILESIZE + 130)
+        screen.blit(phase_change_text, phase_change_rect)
+    # Otherwise, do nothing
+    else:
+        # Place enemy's portrait on the left side
+        screen.blit(enemy.portrait, (15, MAPHEIGHT * TILESIZE + 10))
 
-    phase_change_text = stats_font.render("(Press e to continue)", True, WHITE)
-    phase_change_rect = phase_change_text.get_rect()
-    phase_change_rect.center = (325, MAPHEIGHT * TILESIZE + 130)
-    screen.blit(phase_change_text, phase_change_rect)
+        # Enemy name
+        enemy_name_text = label_font.render(enemy.name, True, WHITE)
+        screen.blit(enemy_name_text, (275, MAPHEIGHT * TILESIZE + 5))
+
+        # waiting label
+        attacked_text = label_font.render("waits.", True, WHITE)
+        screen.blit(attacked_text, (275, MAPHEIGHT * TILESIZE + 40))
+
+        phase_change_text = stats_font.render("(Press e to continue)", True, WHITE)
+        phase_change_rect = phase_change_text.get_rect()
+        phase_change_rect.center = (325, MAPHEIGHT * TILESIZE + 130)
+        screen.blit(phase_change_text, phase_change_rect)
 
     # when e key is pressed, update state_tracker for next phase
     key_state = pygame.key.get_pressed()
     if key_state[pygame.K_e]:
-        # Both characters are updated with damage. Done here to prevent an infinite loop of constant damage
-        # Character takes damage
-        character.take_damage(enemy.atk, enemy.type)
-        # Enemy takes damage
-        enemy.take_damage(character.atk, character.type)
-        # Check if character is dead:
-        if character.current_health <= 0:
-            remaining_player_units -= 1
-        character.update()
-        # Check if enemy is dead
-        if enemy.current_health <= 0:
-            remaining_enemy_units -= 1
-        enemy.update()
+        if enemy.last_attacked_by > -1:
+            # Both characters are updated with damage. Done here to prevent an infinite loop of constant damage
+            # Character takes damage
+            character.take_damage(enemy.atk, enemy.type)
+            # Enemy takes damage
+            enemy.take_damage(character.atk, character.type)
+            # Check if character is dead:
+            if character.current_health <= 0:
+                remaining_player_units -= 1
+                prev_array_position = units.index(character)
+                units.pop(prev_array_position)
+                # Update enemies last_attacked_by to account for defeated unit being removed from the units array
+                for i in baddies:
+                    if baddies[i].last_attacked_by > prev_array_position:
+                        baddies[i].last_attacked_by -= 1
+            character.update()
+            # Check if enemy is dead
+            if enemy.current_health <= 0:
+                remaining_enemy_units -= 1
+                prev_array_position = baddies.index(enemy)
+                baddies.pop(prev_array_position)
+            enemy.update()
+        # Reduce unmoved_enemies by 1: the current enemy's turn is over
         unmoved_enemies -= 1
         # If win/lose conditions are not met and all enemies have finished their turns, move on to start_player_phase
         if unmoved_enemies <= -1:
@@ -527,7 +571,7 @@ def show_next_player_state(character):
     screen.blit(player_phase_text, player_phase_rect)
 
     # Create message to tell player how to start turn
-    phase_change_text = stats_font.render("(Press o to continue)", True, WHITE)
+    phase_change_text = stats_font.render("(Press v to continue)", True, WHITE)
     phase_change_rect = phase_change_text.get_rect()
     phase_change_rect.center = (325, MAPHEIGHT*TILESIZE + 110)
     screen.blit(phase_change_text, phase_change_rect)
@@ -537,7 +581,7 @@ def show_next_player_state(character):
 
     # when y key is pressed, update state_tracker for next phase
     key_state = pygame.key.get_pressed()
-    if key_state[pygame.K_o]:
+    if key_state[pygame.K_v]:
         # Update state_tracker to move on to move state
         state_tracker = 1
 
@@ -555,17 +599,17 @@ def show_next_enemy_state(enemy):
     screen.blit(player_phase_text, player_phase_rect)
 
     # Create message to tell player how to start turn
-    phase_change_text = stats_font.render("(Press o to continue)", True, WHITE)
+    phase_change_text = stats_font.render("(Press v to continue)", True, WHITE)
     phase_change_rect = phase_change_text.get_rect()
     phase_change_rect.center = (325, MAPHEIGHT*TILESIZE + 110)
     screen.blit(phase_change_text, phase_change_rect)
 
-    # Portrait of character
+    # Portrait of enemy
     screen.blit(enemy.portrait, (15, MAPHEIGHT * TILESIZE + 10))
 
     # when y key is pressed, update state_tracker for next phase
     key_state = pygame.key.get_pressed()
-    if key_state[pygame.K_o]:
+    if key_state[pygame.K_v]:
         # Update state_tracker to move on to enemy_attack_state
         state_tracker = 6
 '''
@@ -666,21 +710,21 @@ while running:
     elif state_tracker == 2:
         check_enemy_state(units[unmoved_units], baddies[units[unmoved_units].attacked])
     elif state_tracker == 3:
-        battle_forcast_state(mage, thief0)
+        battle_forcast_state(units[unmoved_units], baddies[units[unmoved_units].attacked])
     elif state_tracker == 4:
-        attack_state(mage, thief0)
+        attack_state(units[unmoved_units], baddies[units[unmoved_units].attacked])
     elif state_tracker == 5:
         start_enemy_phase_state()
     elif state_tracker == 6:
-        enemy_attack_phase(thief0, mage)
+        enemy_attack_phase(baddies[unmoved_enemies])
     elif state_tracker == 7:
         lose_state()
     elif state_tracker == 8:
         win_state()
     elif state_tracker == 9:
-        show_next_player_state(mage)
+        show_next_player_state(units[unmoved_units])
     elif state_tracker == 10:
-        show_next_enemy_state(thief0)
+        show_next_enemy_state(baddies[unmoved_enemies])
 
 
     # end movement and attack
