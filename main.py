@@ -101,7 +101,7 @@ frame1 = mage_tileset.subsurface([0, 0, 32, 32])
 frame2 = mage_tileset.subsurface([32, 0, 32, 32])
 frame3 = mage_tileset.subsurface([64, 0, 32, 32])
 mageFrames = [frame1, frame2, frame3]
-#Initialize Units
+#Initialize Units - mage, warrior, tank
 mage = Player("Mage", 25, 3, 1, 3, 7, "Magical", "mageframe0.png", "mage_portrait.jpeg", 0)
 mage.rect.x = MAPWIDTH * TILESIZE- 325 - 16
 mage.rect.y = MAPHEIGHT * TILESIZE - 600 - 16
@@ -120,6 +120,7 @@ tank.rect.y = MAPHEIGHT * TILESIZE - 600 - 16
 tank_list = pygame.sprite.Group()
 tank_list.add(tank)
 tank.set_sprite(tank_list)
+# these are the enemy units but due to the fact that they are ultimatly the same abstraction there is no need to use the alternitive class for now
 thief0 = Player("Thief", 30, 1, 3, 2, 9, "Physical", "thiefframe0.png", "thief_portrait.jpeg", 0)
 thief0.rect.x = MAPWIDTH * TILESIZE - 325 -16
 thief0.rect.y = MAPHEIGHT * TILESIZE - 325 -16

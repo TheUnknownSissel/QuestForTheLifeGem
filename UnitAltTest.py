@@ -1,6 +1,7 @@
+#place to test unit stuff outdated but usefull
 import pygame
 import os
-ship_img = pygame.image.load(os.path.join(Textures, "ship-blue.png")).convert()
+ship_img = pygame.image.load(os.path.join(Textures, ".png")).convert()
 BLACK = (0, 0, 0)
 class Player(pygame.sprite.Sprite):
     def __init__(self):

@@ -1,7 +1,7 @@
 '''
 
 This file went unused: we realized that enemies and playable characters use the same stats, so they both use unit.py
-
+possible need for a mob class is still a reality if further implimentation happned in the future
 
 import os
 import random
