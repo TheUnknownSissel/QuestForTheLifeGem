@@ -96,31 +96,44 @@ frame2 = mage_tileset.subsurface([32, 0, 32, 32])
 frame3 = mage_tileset.subsurface([64, 0, 32, 32])
 mageFrames = [frame1, frame2, frame3]
 #Initialize Units
-mage = Player("Mage", 25, 3, 1, 3, 7, "Magical", "mageframe0.png", "mage_portrait.jpeg", 0, MAPWIDTH -1, MAPHEIGHT-1)
+mage = Player("Mage", 25, 3, 1, 3, 7, "Magical", "mageframe0.png", "mage_portrait.jpeg", 0)
 mage.rect.x = MAPWIDTH * TILESIZE- 325 - 16
 mage.rect.y = MAPHEIGHT * TILESIZE - 600 - 16
-player_list = pygame.sprite.Group()
-player_list.add(mage)
-warrior = Player("Warrior", 100, 8, 5, 2, 10, "Physical", "FighterTest.png", "fighter_portrait.jpeg", 0, MAPWIDTH-2, MAPHEIGHT-1)
+mage_list = pygame.sprite.Group()
+mage_list.add(mage)
+mage.set_sprite(mage_list)
+warrior = Player("Warrior", 100, 8, 5, 2, 10, "Physical", "FighterTest.png", "fighter_portrait.jpeg", 0)
+'''
 # ISSUE when spawning multiple units how to get multiple to draw from player_list
-'''warrior.rect.x = MAPWIDTH-2
+warrior.rect.x = MAPWIDTH-2
 warrior.rect.y = MAPHEIGHT-1
-player_list = pygame.sprite.Group()
-player_list.add(warrior)'''
-tank = Player("Tank", 200, 1, 12, 7, 0, "Physical", "WarriorTest.png", "knight_portrait.jpeg", 0,  MAPWIDTH-3, MAPHEIGHT-1)
-'''tank.rect.x = MAPWIDTH-3
+warrior_list = pygame.sprite.Group()
+warrior_list.add(warrior)
+warrior.set_sprite(warrior_list)
+tank = Player("Tank", 200, 1, 12, 7, 0, "Physical", "WarriorTest.png", "knight_portrait.jpeg", 0)
+tank.rect.x = MAPWIDTH-3
 tank.rect.y = MAPHEIGHT-1
-player_list = pygame.sprite.Group()
-player_list.add(tank)'''
-
-baddie = Player("Thief", 25, 1, 5, 2, 5, "Physical", "thiefframe0.png", "thief_portrait.jpeg", 0,  MAPWIDTH-3, MAPHEIGHT-1)
-baddie.rect.x = MAPWIDTH * TILESIZE - 325 -16
-baddie.rect.y = MAPHEIGHT * TILESIZE - 325 -16
-baddie_list =pygame.sprite.Group()
-baddie_list.add(baddie)
-#Create list of these units
+tank_list = pygame.sprite.Group()
+tank_list.add(tank)
+tank.set_sprite(tank_list)
+'''
+thief0 = Player("Thief", 25, 1, 5, 2, 5, "Physical", "thiefframe0.png", "thief_portrait.jpeg", 0)
+thief0.rect.x = MAPWIDTH * TILESIZE - 325 -16
+thief0.rect.y = MAPHEIGHT * TILESIZE - 325 -16
+thief0_list =pygame.sprite.Group()
+thief0_list.add(thief0)
+thief0.set_sprite(thief0_list)
+thief1 = Player("Thief", 25, 1, 5, 2, 5, "Physical", "thiefframe0.png", "thief_portrait.jpeg", 0)
+thief1.rect.x = MAPWIDTH * TILESIZE - 325 -16
+thief1.rect.y = MAPHEIGHT * TILESIZE - 325 -16
+thief1_list = pygame.sprite.Group()
+thief1_list.add(thief1_list)
+thief1.set_sprite(thief1_list)
+#Create list of these units - when frames are done needed to add in the lists for both and update the collection of untis
 units = [mage]
-baddies = [baddie]
+baddies = [thief0, thief1]
+unitsSprites = [mage_list]
+baddiesSprites = [thief0_list, thief1_list]
 
 # For tracking player units that haven't taken their turn yet. 1 is subtracted to keep track of unit position in array
 unmoved_units = len(units) - 1
@@ -197,7 +210,7 @@ def start_player_phase_state():
 
 # Allow the player to move the character when it is the character's turn.
 # This state has state_tracker value of 1.
-def move_state(character):
+def move_state(character, spriteList):
     # Gain access to global variable state_tracker and last_direction
     global state_tracker
     global last_direction
@@ -211,12 +224,19 @@ def move_state(character):
     character.update()
     # Record last direction the player character moved
     last_direction = pygame.key.get_pressed()
-    # For checking for collisions
-    collisions = pygame.sprite.groupcollide(baddie_list, player_list, False, False)
-    # If collision with an enemy occurred, move on to check_enemy_state
-    for collision in collisions:
-        state_tracker = 2
 
+    # For checking for collisions
+    for sprite in spriteList:
+        collisions = pygame.sprite.groupcollide(sprite, character.spriteGrab, False, False)
+        # If collision with an enemy occurred, move on to check_enemy_state
+        #sprtite = theif1_list
+
+        for collision in collisions:
+            state_tracker = 2
+            if sprite == thief0_list:
+                character.attacked = 0
+            if sprite == thief1_list:
+                character.attacked = 1
 # When an enemy is collided into, the player can check its stats. They then decide to attack or return to move_state.
 # This state has state_tracker value of 2.
 def check_enemy_state(character, enemy):
@@ -551,7 +571,8 @@ def show_next_enemy_state(enemy):
     if key_state[pygame.K_o]:
         # Update state_tracker to move on to enemy_attack_state
         state_tracker = 6
-
+'''
+original implimentation but had to be changed/revised to match state machine implimentation see movestate 
 def touch():
     # this was found from pygame.org and the professor's code
     collisions = pygame.sprite.groupcollide(baddie_list, player_list, False, False)
@@ -565,6 +586,7 @@ def touch():
     if pygame.sprite.collide_rect(mage, baddie):
         # needs to change for the future
         mage.rect.x += 1 + mage.rect.x
+'''
 def winorlose():
     # Gain access to global variables state_tracker, remaining_player_units, and remaining_enemy_units
     global state_tracker
@@ -606,10 +628,10 @@ while running:
             # Draw the resource at that position
             screen.blit(textures[Grass5], (column * TILESIZE, row * TILESIZE))
     #set Units
-    player_list.draw(screen)
-    baddie_list.draw(screen)
+    mage_list.draw(screen)
+    thief0_list.draw(screen)
     #Game iterarion loop
-    # Pull Unit from unit order list, reset order if need
+    # Pull Unit from unit order list, reset order if needed
     # Check if unit is Player controlable if movement and attack by player: if GOB (good or bad) is 0 it is a player controlled unit
     '''
     for playable in units:
@@ -640,17 +662,17 @@ while running:
     if state_tracker == 0:
         start_player_phase_state()
     elif state_tracker == 1:
-        move_state(mage)
+        move_state(units[unmoved_units], baddiesSprites)
     elif state_tracker == 2:
-        check_enemy_state(mage, baddie)
+        check_enemy_state(units[unmoved_units], baddies[units[unmoved_units].attacked])
     elif state_tracker == 3:
-        battle_forcast_state(mage, baddie)
+        battle_forcast_state(mage, thief0)
     elif state_tracker == 4:
-        attack_state(mage, baddie)
+        attack_state(mage, thief0)
     elif state_tracker == 5:
         start_enemy_phase_state()
     elif state_tracker == 6:
-        enemy_attack_phase(baddie, mage)
+        enemy_attack_phase(thief0, mage)
     elif state_tracker == 7:
         lose_state()
     elif state_tracker == 8:
@@ -658,7 +680,7 @@ while running:
     elif state_tracker == 9:
         show_next_player_state(mage)
     elif state_tracker == 10:
-        show_next_enemy_state(baddie)
+        show_next_enemy_state(thief0)
 
 
     # end movement and attack

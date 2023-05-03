@@ -14,7 +14,7 @@ mageFrames = [frame1, frame2, frame3]
 CYAN = (0, 255, 255)
 BLACK = (0, 0, 0)
 class Player(pygame.sprite.Sprite):
-    def __init__(self, name, health, speed, defen, res, atk, type, imageref, portrait, GOB, positionx, positiony):
+    def __init__(self, name, health, speed, defen, res, atk, type, imageref, portrait, GOB):
 
         pygame.sprite.Sprite.__init__(self)
         # imageref: the sprite
@@ -53,7 +53,8 @@ class Player(pygame.sprite.Sprite):
         self.attacked = -1
         # For tracking the array position of the last unit that attacked them (for enemy units)
         self.last_attacked_by = -1
-
+        #sprite list grab
+        self.spriteGrab = None
     #Getters and setters for all unit stats
     def set_name(self, n):
         self.name = n
@@ -103,8 +104,11 @@ class Player(pygame.sprite.Sprite):
         return self.max_health
     def set_maxhealth(self):
         return self.max_health
+    def set_sprite(self, x):
+        self.spriteGrab = x
     # the way damage was calculated was updated and changed as the project went along
     '''
+    Original idea for how damage was calculated but needed to be revised to account for unit types and def and res
     def take_damage (self, damage, magdamage):
         defen = self.get_defen()
         res = self.get_res()
