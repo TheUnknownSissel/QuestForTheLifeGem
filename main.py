@@ -117,10 +117,20 @@ baddie.rect.y = MAPHEIGHT * TILESIZE - 325 -16
 baddie_list =pygame.sprite.Group()
 baddie_list.add(baddie)
 #Create list of these units
-units = [warrior, mage, tank]
+units = [mage]
 baddies = [baddie]
 
+# For tracking player units that haven't taken their turn yet. 1 is subtracted to keep track of unit position in array
+unmoved_units = len(units) - 1
 
+# For keeping track of number of living player units
+remaining_player_units = len(units) - 1
+
+# For tracking enemy units that haven't taken their turn yet. 1 is subtracted to keep track of unit position in array
+unmoved_enemies = len(baddies) - 1
+
+# For keeping track of number of enemy player units
+remaining_enemy_units = len(baddies) - 1
 
 #setting up the game over and You win "screens"/ logo
 gameover = Logo('Gameover.png')
@@ -162,10 +172,14 @@ last_direction = pygame.key.get_pressed()
 # signal start of player phase.
 # This state has state_tracker value of 0.
 def start_player_phase_state():
-    # Gain access to global variable state_tracker
+    # Gain access to global variable state_tracker, remaining_player_units, and unmoved_units
     global state_tracker
+    global remaining_player_units
+    global unmoved_units
     # Clear display window
     reset_menu()
+    # Set the value of unmoved_units to the value of remaining_player_units
+    unmoved_units = remaining_player_units
     # Create text to signal start of player phase
     player_phase_text = phase_font.render("Player Phase!", True, WHITE)
     player_phase_rect = player_phase_text.get_rect()
@@ -177,11 +191,11 @@ def start_player_phase_state():
     phase_change_rect.center = (325, MAPHEIGHT*TILESIZE + 110)
     screen.blit(phase_change_text, phase_change_rect)
 
-    # when y key is pressed, update state_tracker for next phase
+    # when c key is pressed, update state_tracker for next phase
     key_state = pygame.key.get_pressed()
     if key_state[pygame.K_c]:
-        # Update state_tracker to move on to move state
-        state_tracker = 1
+        # Update state_tracker to move on to show_next_player_state
+        state_tracker = 9
 
 # Allow the player to move the character when it is the character's turn.
 # This state has state_tracker value of 1.
@@ -311,33 +325,48 @@ def battle_forcast_state(character, enemy):
 # Have both player and enemy units attack each other and update health to reflect that.
 # This state has state_tracker value of 4
 def attack_state(character, enemy):
-    # Gain access to global variable state_tracker
+    # Gain access to global variables state_tracker, unmoved_units, remaining_player_units, and remaining_enemy_units
     global state_tracker
+    global unmoved_units
+    global remaining_player_units
+    global remaining_enemy_units
     # Clear display window
     reset_menu()
     # Enemy takes damage
     enemy.take_damage(character.atk, character.type)
-    # Check if enemy is dead
+    # Check if enemy is dead: update remaining_enemy_units and remove from map if true
+    if enemy.current_health <= 0:
+        remaining_enemy_units -= 1
     enemy.update()
     # Character takes damage
     character.take_damage(enemy.atk, enemy.type)
-    # Check if character is dead
+    # Check if character is dead: update remaining_enemy_units and remove from map if true
+    if character.current_health <= 0:
+        remaining_player_units -= 1
     character.update()
-    # Check if winning or losing conditions were met
-    '''
-    TO DO: change this to reflect victory and defeat states
-    '''
-    # If win/lose conditions are not met, move on to start_enemy_phase_state
-    state_tracker = 5
-    winorlose()
+    # Update value of unmoved_units to reflect that current player character has finished their turn
+    unmoved_units -= 1
+    # If win/lose conditions are not met and there are no more player characters to move,
+    # move on to start_enemy_phase_state
+    if unmoved_units == -1:
+        state_tracker = 5
+        winorlose()
+    # Otherwise, go to show_next_player_state for the next player character's turn
+    else:
+        state_tracker = 9
+        winorlose()
 
 # signal start of enemy phase.
 # This state has state_tracker value of 5.
 def start_enemy_phase_state():
-    # Gain access to global variable state_tracker
+    # Gain access to global variable state_tracker, unmoved_enemies, and remaining_enemy_units
     global state_tracker
+    global unmoved_enemies
+    global remaining_enemy_units
     # Clear display window
     reset_menu()
+    # Set the value of unmoved_enemies to the value of remaining_enemy_units
+    unmoved_enemies = remaining_enemy_units
     # Create text to signal start of Enemy phase
     player_phase_text = phase_font.render("Enemy Phase!", True, WHITE)
     player_phase_rect = player_phase_text.get_rect()
@@ -352,8 +381,8 @@ def start_enemy_phase_state():
     # when y key is pressed, update state_tracker for next phase
     key_state = pygame.key.get_pressed()
     if key_state[pygame.K_c]:
-        # Update state_tracker to move on to enemy_attack_state
-        state_tracker = 6
+        # Update state_tracker to move on to show_next_enemy_state
+        state_tracker = 10
 
 # Enemy attacks player unit that attacked it last
 # This state has state_tracker value of 6.
@@ -361,8 +390,11 @@ def start_enemy_phase_state():
 TO DO: make the enemy AI more complicated
 '''
 def enemy_attack_phase(enemy, character):
-    # Gain access to global variable state_tracker
+    # Gain access to global variables state_tracker, unmoved_enemies, remaining_player_units, and remaining_enemy_units
     global state_tracker
+    global unmoved_enemies
+    global remaining_player_units
+    global remaining_enemy_units
     # Clear display window
     reset_menu()
 
@@ -436,12 +468,22 @@ def enemy_attack_phase(enemy, character):
         character.take_damage(enemy.atk, enemy.type)
         # Enemy takes damage
         enemy.take_damage(character.atk, character.type)
-        # Check if character is dead
+        # Check if character is dead:
+        if character.current_health <= 0:
+            remaining_player_units -= 1
         character.update()
         # Check if enemy is dead
+        if enemy.current_health <= 0:
+            remaining_enemy_units -= 1
         enemy.update()
-        state_tracker = 0
-        # If win/lose conditions are not met, move on to start_player_phase
+        unmoved_enemies -= 1
+        # If win/lose conditions are not met and all enemies have finished their turns, move on to start_player_phase
+        if unmoved_enemies <= -1:
+            state_tracker = 0
+        # Otherwise, go to show_next_enemy_state
+        else:
+            state_tracker = 10
+        # Will go to lose_state or win_state if conditions are met
         winorlose()
 
 # Displayed when the player loses.
@@ -456,6 +498,61 @@ def win_state():
     reset_menu()
     win_list.draw(screen)
 
+# Tells the player which player character is moving next.
+# This state has state_tracker value of 9.
+def show_next_player_state(character):
+    # Gain access to global variables state_tracker
+    global state_tracker
+    # Clear display window
+    reset_menu()
+    # Create text to tell whose turn it is
+    player_phase_text = phase_font.render(character.name + "'s Turn!", True, WHITE)
+    player_phase_rect = player_phase_text.get_rect()
+    player_phase_rect.center = (325, MAPHEIGHT*TILESIZE + 60)
+    screen.blit(player_phase_text, player_phase_rect)
+
+    # Create message to tell player how to start turn
+    phase_change_text = stats_font.render("(Press o to continue)", True, WHITE)
+    phase_change_rect = phase_change_text.get_rect()
+    phase_change_rect.center = (325, MAPHEIGHT*TILESIZE + 110)
+    screen.blit(phase_change_text, phase_change_rect)
+
+    # Portrait of character
+    screen.blit(character.portrait, (15, MAPHEIGHT * TILESIZE + 10))
+
+    # when y key is pressed, update state_tracker for next phase
+    key_state = pygame.key.get_pressed()
+    if key_state[pygame.K_o]:
+        # Update state_tracker to move on to move state
+        state_tracker = 1
+
+# Tells the player which player character is moving next.
+# This state has state_tracker value of 10.
+def show_next_enemy_state(enemy):
+    # Gain access to global variables state_tracker
+    global state_tracker
+    # Clear display window
+    reset_menu()
+    # Create text to tell whose turn it is
+    player_phase_text = phase_font.render(enemy.name + "'s Turn!", True, WHITE)
+    player_phase_rect = player_phase_text.get_rect()
+    player_phase_rect.center = (325, MAPHEIGHT*TILESIZE + 60)
+    screen.blit(player_phase_text, player_phase_rect)
+
+    # Create message to tell player how to start turn
+    phase_change_text = stats_font.render("(Press o to continue)", True, WHITE)
+    phase_change_rect = phase_change_text.get_rect()
+    phase_change_rect.center = (325, MAPHEIGHT*TILESIZE + 110)
+    screen.blit(phase_change_text, phase_change_rect)
+
+    # Portrait of character
+    screen.blit(enemy.portrait, (15, MAPHEIGHT * TILESIZE + 10))
+
+    # when y key is pressed, update state_tracker for next phase
+    key_state = pygame.key.get_pressed()
+    if key_state[pygame.K_o]:
+        # Update state_tracker to move on to enemy_attack_state
+        state_tracker = 6
 
 def touch():
     # this was found from pygame.org and the professor's code
@@ -470,21 +567,24 @@ def touch():
         # needs to change for the future
         mage.rect.x += 1 + mage.rect.x
 def winorlose():
-    # Gain access to global variable state_tracker
+    # Gain access to global variables state_tracker, remaining_player_units, and remaining_enemy_units
     global state_tracker
-    #for unit in units
-    # unit.get_current_health
-    if mage.get_current_health() <= 0:
+    global remaining_player_units
+    global remaining_enemy_units
+
+    # If there are no more remaining player units, go to lose_state
+    if remaining_player_units <= -1:
         state_tracker = 7
         #reset_menu()
         #gameover_list.draw(screen)
         #print("gameover")
-    #for baddie in baddies
-    if baddie.get_current_health() <= 0:
+    # If there are no more remaining enemy units, go to win_state
+    if remaining_enemy_units <= -1:
         state_tracker = 8
         #reset_menu()
         #win_list.draw(screen)
         #print("win")
+
 # Starting the game loop
 while running:
     clock.tick(FPS)
@@ -499,7 +599,7 @@ while running:
     for row in range(MAPHEIGHT):
         # Loop through each column in the row
         for column in range(MAPWIDTH):
-            # Draw the resource at that position in the tilemap
+            # Draw the resource at that position
             screen.blit(textures[Grass5], (column * TILESIZE, row * TILESIZE))
     #set Units
     player_list.draw(screen)
@@ -551,6 +651,10 @@ while running:
         lose_state()
     elif state_tracker == 8:
         win_state()
+    elif state_tracker == 9:
+        show_next_player_state(mage)
+    elif state_tracker == 10:
+        show_next_enemy_state(baddie)
 
 
     # end movement and attack

@@ -49,6 +49,10 @@ class Player(pygame.sprite.Sprite):
         self.frame = 0
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 60
+        # For tracking the array position of the last enemy the unit attacked (for player units)
+        self.attacked = -1
+        # For tracking the array position of the last unit that attacked them (for enemy units)
+        self.last_attacked_by = -1
 
     #Getters and setters for all unit stats
     def set_name(self, n):
