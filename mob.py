@@ -1,3 +1,8 @@
+'''
+
+This file went unused: we realized that enemies and playable characters use the same stats, so they both use unit.py
+
+
 import os
 import random
 import pygame
@@ -14,7 +19,7 @@ class evildoer(pygame.sprite.Sprite):
         self.images = []
         img = pygame.image.load(os.path.join('Textures', 'WarriorTest.png')).convert()
         #future implementation
-        '''img = pygame.image.load('Textures', '' + str()).convert()'''
+        ''''''img = pygame.image.load('Textures', '' + str()).convert()''''''
         self.images.append(img)
         self.image = self.images[0]
         self.rect = self.image.get_rect()
@@ -26,7 +31,7 @@ class evildoer(pygame.sprite.Sprite):
         self.atk = (atk)
         self.type = (type)
         #outdated
-        '''self.image = pygame.image.load(imageref)'''
+        ''''''self.image = pygame.image.load(imageref)''''''
         self.GOB = (GOB)
 
 
@@ -132,3 +137,4 @@ class evildoer(pygame.sprite.Sprite):
             self.rect.right = MAXRIGHT
         if self.rect.bottom > MAXBOTTOM:
             self.rect.bottom = MAXBOTTOM
+'''

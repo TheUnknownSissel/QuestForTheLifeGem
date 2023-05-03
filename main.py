@@ -14,10 +14,13 @@ from gameScreens import Logo
 pygame.init()
 #initialize music
 pygame.mixer.init()
+'''
+Unused concept for creating the game window. Replaced with the code found in map.py
 #Create the window
 background_colour = (0, 133, 66)
 screen_width = 480
 screen_height = 640
+'''
 FPS = 60
 #colors
 BLACK = (0, 0, 0)
@@ -79,6 +82,9 @@ def reset_menu():
     # Creates a black box to cover the old data so new data could be displayed
     pygame.draw.rect(screen, BLACK, (0, 640, 640, 150))
 
+'''
+Went Unused: we couldn't stop the sound from being played constantly in its assigned state
+'''
 #initialize sword slash sound effect
 #taken from https://mixkit.co/free-sound-effects/sword/
 sword_effect = pygame.mixer.Sound(os.path.join('Audio', 'mixkit-fantasy-sword-slide-2798.wav'))
@@ -88,7 +94,7 @@ unitPos2 = [MAPWIDTH-2, MAPHEIGHT-1]
 unitPos3 = [MAPWIDTH-3, MAPHEIGHT-1]
 
 unitPosList = [unitPos1, unitPos2, unitPos3]
-# tile set for the animations/ not set yet for direwctional
+# tile set for the animations/ not set yet for directional
 mage_tileset = pygame.image.load('Textures/mage_spritesheet.png')
 #there are three animations each being at the top with the diemensions 34 I cant find any documentation on how the subsurface is working
 frame1 = mage_tileset.subsurface([0, 0, 32, 32])
@@ -102,13 +108,13 @@ mage.rect.y = MAPHEIGHT * TILESIZE - 600 - 16
 mage_list = pygame.sprite.Group()
 mage_list.add(mage)
 mage.set_sprite(mage_list)
-warrior = Player("Warrior", 100, 8, 5, 2, 10, "Physical", "warriorframe0.png", "fighter_portrait.jpeg", 0)
+warrior = Player("Warrior", 35, 8, 5, 2, 10, "Physical", "warriorframe0.png", "fighter_portrait.jpeg", 0)
 warrior.rect.x = MAPWIDTH * TILESIZE- 200 - 16
 warrior.rect.y = MAPHEIGHT * TILESIZE - 600 - 16
 warrior_list = pygame.sprite.Group()
 warrior_list.add(warrior)
 warrior.set_sprite(warrior_list)
-tank = Player("Tank", 200, 1, 12, 7, 0, "Physical", "tankframe0.png", "knight_portrait.jpeg", 0)
+tank = Player("Tank", 50, 1, 12, 7, 8, "Physical", "tankframe0.png", "knight_portrait.jpeg", 0)
 tank.rect.x = MAPWIDTH * TILESIZE- 400 - 16
 tank.rect.y = MAPHEIGHT * TILESIZE - 600 - 16
 tank_list = pygame.sprite.Group()
@@ -156,6 +162,10 @@ win.rect.x = MAPWIDTH * TILESIZE - 325 - 52
 win.rect.y = MAPHEIGHT * TILESIZE - 325 - 48
 win_list =pygame.sprite.Group()
 win_list.add(win)
+
+'''
+From original planning stage: went unused
+'''
 #Initialize mobs
 #list here for set turn order
 
@@ -167,7 +177,9 @@ pygame.display.set_caption('Quest For the Life Gem')
 clock = pygame.time.Clock()
 
 running = True
-
+'''
+Left over from original screen test
+'''
 #pygame.draw.rect(screen, WHITE, )
 #pygame.draw.rect(screen, MAGENTA, (400, 100, 100, 150))
 
@@ -613,7 +625,7 @@ def show_next_enemy_state(enemy):
         # Update state_tracker to move on to enemy_attack_state
         state_tracker = 6
 '''
-original implimentation but had to be changed/revised to match state machine implimentation see movestate 
+original implementation but had to be changed/revised to match state machine implementation: see move_state 
 def touch():
     # this was found from pygame.org and the professor's code
     collisions = pygame.sprite.groupcollide(baddie_list, player_list, False, False)
@@ -628,6 +640,8 @@ def touch():
         # needs to change for the future
         mage.rect.x += 1 + mage.rect.x
 '''
+# Checks to see if winning or losing conditions have been met
+# Any commented out code was moved to win_state or lose_state
 def winorlose():
     # Gain access to global variables state_tracker, remaining_player_units, and remaining_enemy_units
     global state_tracker
@@ -674,9 +688,13 @@ while running:
     thief1_list.draw(screen)
     tank_list.draw(screen)
     warrior_list.draw(screen)
+    '''
+    Unused notes created when planning how to run the game loop
+    
     #Game iterarion loop
     # Pull Unit from unit order list, reset order if needed
     # Check if unit is Player controlable if movement and attack by player: if GOB (good or bad) is 0 it is a player controlled unit
+    '''
     '''
     for playable in units:
 
@@ -687,6 +705,7 @@ while running:
         # Enemy controled - AI do the thing (find out what that entails)
         if mage.get_GOB() == 1:
             #AI movement/ attack here
+    '''
     '''
     # Display stats of current character
     #display_unit_data(mage)
@@ -701,7 +720,7 @@ while running:
     #pygame.display.flip()
     #mage.update()
     #touch()
-
+'''
     # State machine
     if state_tracker == 0:
         start_player_phase_state()
@@ -726,7 +745,9 @@ while running:
     elif state_tracker == 10:
         show_next_enemy_state(baddies[unmoved_enemies])
 
-
+    '''
+    More unused notes from planning phase
+    
     # end movement and attack
 
     # Update status of units, check for deaths and remove units
@@ -738,5 +759,6 @@ while running:
 
     # go back to beginning of loop
     # checks for death
+    '''
     pygame.display.update()
 

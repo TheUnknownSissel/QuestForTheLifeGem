@@ -154,6 +154,7 @@ class Player(pygame.sprite.Sprite):
             # Update current health to account for damage
             self.current_health = self.current_health - total_damage
 
+    # Controls character movement
     def move(self):
 
         dis = self.get_speed()
@@ -201,6 +202,7 @@ class Player(pygame.sprite.Sprite):
         if key_state[pygame.K_DOWN]:
             self.rect.y = y - 4
 
+    # Controls bounding, removes units from map when defeated, and controls sprite animation and positioning
     def update(self):
         if self.get_current_health() <= 0:
             self.kill()
