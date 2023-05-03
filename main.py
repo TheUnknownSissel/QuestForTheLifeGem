@@ -121,10 +121,10 @@ thief0_list =pygame.sprite.Group()
 thief0_list.add(thief0)
 thief0.set_sprite(thief0_list)
 thief1 = Player("Thief", 25, 1, 5, 2, 5, "Physical", "thiefframe0.png", "thief_portrait.jpeg", 0)
-thief1.rect.x = MAPWIDTH * TILESIZE - 250 -16
-thief1.rect.y = MAPHEIGHT * TILESIZE - 250 -16
+thief1.rect.x = MAPWIDTH * TILESIZE - 200 -16
+thief1.rect.y = MAPHEIGHT * TILESIZE - 325 -16
 thief1_list = pygame.sprite.Group()
-thief1_list.add(thief1_list)
+thief1_list.add(thief1)
 thief1.set_sprite(thief1_list)
 #Create list of these units - when frames are done needed to add in the lists for both and update the collection of untis
 units = [mage, warrior, tank]
@@ -627,6 +627,7 @@ while running:
     #set Units
     mage_list.draw(screen)
     thief0_list.draw(screen)
+    thief1_list.draw(screen)
     tank_list.draw(screen)
     warrior_list.draw(screen)
     #Game iterarion loop
