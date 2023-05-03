@@ -102,21 +102,18 @@ mage.rect.y = MAPHEIGHT * TILESIZE - 600 - 16
 mage_list = pygame.sprite.Group()
 mage_list.add(mage)
 mage.set_sprite(mage_list)
-warrior = Player("Warrior", 100, 8, 5, 2, 10, "Physical", "FighterTest.png", "fighter_portrait.jpeg", 0)
-'''
-# ISSUE when spawning multiple units how to get multiple to draw from player_list
-warrior.rect.x = MAPWIDTH-2
-warrior.rect.y = MAPHEIGHT-1
+warrior = Player("Warrior", 100, 8, 5, 2, 10, "Physical", "warriorframe0.png", "fighter_portrait.jpeg", 0)
+warrior.rect.x = MAPWIDTH * TILESIZE- 200 - 16
+warrior.rect.y = MAPHEIGHT * TILESIZE - 600 - 16
 warrior_list = pygame.sprite.Group()
 warrior_list.add(warrior)
 warrior.set_sprite(warrior_list)
-tank = Player("Tank", 200, 1, 12, 7, 0, "Physical", "WarriorTest.png", "knight_portrait.jpeg", 0)
-tank.rect.x = MAPWIDTH-3
-tank.rect.y = MAPHEIGHT-1
+tank = Player("Tank", 200, 1, 12, 7, 0, "Physical", "tankframe0.png", "knight_portrait.jpeg", 0)
+tank.rect.x = MAPWIDTH * TILESIZE- 400 - 16
+tank.rect.y = MAPHEIGHT * TILESIZE - 600 - 16
 tank_list = pygame.sprite.Group()
 tank_list.add(tank)
 tank.set_sprite(tank_list)
-'''
 thief0 = Player("Thief", 25, 1, 5, 2, 5, "Physical", "thiefframe0.png", "thief_portrait.jpeg", 0)
 thief0.rect.x = MAPWIDTH * TILESIZE - 325 -16
 thief0.rect.y = MAPHEIGHT * TILESIZE - 325 -16
@@ -124,13 +121,13 @@ thief0_list =pygame.sprite.Group()
 thief0_list.add(thief0)
 thief0.set_sprite(thief0_list)
 thief1 = Player("Thief", 25, 1, 5, 2, 5, "Physical", "thiefframe0.png", "thief_portrait.jpeg", 0)
-thief1.rect.x = MAPWIDTH * TILESIZE - 325 -16
-thief1.rect.y = MAPHEIGHT * TILESIZE - 325 -16
+thief1.rect.x = MAPWIDTH * TILESIZE - 250 -16
+thief1.rect.y = MAPHEIGHT * TILESIZE - 250 -16
 thief1_list = pygame.sprite.Group()
 thief1_list.add(thief1_list)
 thief1.set_sprite(thief1_list)
 #Create list of these units - when frames are done needed to add in the lists for both and update the collection of untis
-units = [mage]
+units = [mage, warrior, tank]
 baddies = [thief0, thief1]
 unitsSprites = [mage_list]
 baddiesSprites = [thief0_list, thief1_list]
@@ -630,6 +627,8 @@ while running:
     #set Units
     mage_list.draw(screen)
     thief0_list.draw(screen)
+    tank_list.draw(screen)
+    warrior_list.draw(screen)
     #Game iterarion loop
     # Pull Unit from unit order list, reset order if needed
     # Check if unit is Player controlable if movement and attack by player: if GOB (good or bad) is 0 it is a player controlled unit
