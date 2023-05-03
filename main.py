@@ -223,6 +223,7 @@ def move_state(character, spriteList):
     # Gain access to global variable state_tracker and last_direction
     global state_tracker
     global last_direction
+    global baddies
     # Clear display window
     reset_menu()
     # Display stats of current character
@@ -239,13 +240,16 @@ def move_state(character, spriteList):
         collisions = pygame.sprite.groupcollide(sprite, character.spriteGrab, False, False)
         # If collision with an enemy occurred, move on to check_enemy_state
         #sprtite = theif1_list
-
+        # If statements account for if one enemy is dead.
         for collision in collisions:
             state_tracker = 2
-            if sprite == thief0_list:
+            if len(baddies) == 2:
+                if sprite == thief0_list:
+                    character.attacked = 0
+                if sprite == thief1_list:
+                    character.attacked = 1
+            if len(baddies) == 1:
                 character.attacked = 0
-            if sprite == thief1_list:
-                character.attacked = 1
 
 # When an enemy is collided into, the player can check its stats. They then decide to attack or return to move_state.
 # This state has state_tracker value of 2.
